@@ -1,0 +1,34 @@
+---
+/**
+ * Container — centers content and applies comfortable responsive gutters.
+ * `width="narrow"` is for editorial single-column text blocks.
+ */
+interface Props {
+  width?: "default" | "narrow";
+  as?: keyof HTMLElementTagNameMap;
+  class?: string;
+}
+
+const { width = "default", as = "div", class: className = "" } = Astro.props;
+const Tag = as;
+---
+
+<Tag class:list={["container", `container--${width}`, className]}>
+  <slot />
+</Tag>
+
+<style>
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .container--default {
+    max-width: var(--container-max);
+  }
+
+  .container--narrow {
+    max-width: var(--container-narrow);
+  }
+</style>

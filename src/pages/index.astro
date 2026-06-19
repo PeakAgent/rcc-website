@@ -1,0 +1,117 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import ImageSlot from "../components/ImageSlot.astro";
+import Button from "../components/Button.astro";
+
+// NOTE: Phase 0 placeholder copy. Real home content arrives in Phase 1.
+const description =
+  "Renovation Consulting Co. — construction project management and owner's representation in Palm Springs and the Coachella Valley. We manage your budget, contractors, and timeline so you don't have to.";
+---
+
+<BaseLayout
+  title="Construction Project Management in Palm Springs"
+  description={description}
+  overHero={true}
+>
+  <Hero
+    eyebrow="Owner's Representation · Palm Springs"
+    title="Your project, managed with intention."
+    subtitle="Placeholder headline for Phase 0. Daniel Hekkel represents you — not the contractor — managing budget, trades, and timeline so the work stays calm, clear, and on course."
+    ctaLabel="Schedule a Consultation"
+    ctaHref="/contact"
+  />
+
+  <!-- Intro — proves Section (cream), Container narrow, reveal, type scale -->
+  <Section tone="cream" reveal={true}>
+    <div class="intro">
+      <p class="eyebrow">The role</p>
+      <h2 class="intro__title">
+        One steady point of accountability, from first drawing to final
+        walkthrough.
+      </h2>
+      <p class="lede text-muted">
+        This is a foundation page. It demonstrates the design system — type,
+        spacing, color, components — without the full Phase 1 content.
+      </p>
+      <div class="intro__cta">
+        <Button href="/services" variant="outline">Explore Services</Button>
+        <Button href="/process" variant="ghost">See the Process</Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Atmosphere / photo-slot section — proves Section (blush) + ImageSlot -->
+  <Section tone="blush" reveal={true}>
+    <div class="feature">
+      <div class="feature__text">
+        <p class="eyebrow">The work</p>
+        <h2>Built to hold real project photography.</h2>
+        <p class="text-muted measure">
+          Every place a finished project will eventually appear uses a clean,
+          styled slot — never stock imagery dressed up as completed work.
+        </p>
+        <Button href="/contact" variant="ghost">Schedule a Consultation</Button>
+      </div>
+      <div class="feature__media">
+        <!-- REAL PHOTO SLOT — replace with Daniel's actual project photography. -->
+        <ImageSlot ratio="4 / 3" label="Featured project" />
+      </div>
+    </div>
+  </Section>
+
+  <!-- Quiet closing band before the footer CTA -->
+  <Section tone="ink" reveal={true}>
+    <div class="closing">
+      <p class="eyebrow">Palm Springs &amp; the Coachella Valley</p>
+      <h2 class="closing__title">
+        Calm, composed, and entirely accountable to you.
+      </h2>
+      <Button href="/contact" variant="light">Schedule a Consultation</Button>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .intro {
+    max-width: 52rem;
+  }
+  .intro__title {
+    margin-block: var(--space-3) var(--space-4);
+  }
+  .intro__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: center;
+  }
+  .feature__text h2 {
+    margin-block: var(--space-3) var(--space-3);
+  }
+  .feature__text :global(.btn--ghost) {
+    margin-top: var(--space-4);
+  }
+
+  .closing {
+    max-width: 46rem;
+  }
+  .closing__title {
+    margin-block: var(--space-3) var(--space-5);
+  }
+
+  @media (min-width: 860px) {
+    .feature {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-7);
+    }
+  }
+</style>

@@ -1,0 +1,179 @@
+---
+import Container from "./Container.astro";
+import Button from "./Button.astro";
+import BuildingMark from "./BuildingMark.astro";
+
+const year = new Date().getFullYear();
+
+const nav = [
+  { href: "/", label: "Home" },
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/process", label: "Process" },
+  { href: "/journal", label: "Journal" },
+  { href: "/contact", label: "Contact" },
+];
+
+const legal = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/accessibility", label: "Accessibility" },
+];
+---
+
+<footer class="footer">
+  <Container>
+    <!-- CTA band -->
+    <div class="footer__cta" data-reveal>
+      <p class="eyebrow">Owner's representation</p>
+      <h2 class="footer__cta-title">
+        Let's talk about your project.
+      </h2>
+      <p class="footer__cta-copy text-muted">
+        A calm, considered conversation about your goals, your budget, and how
+        the work gets managed — start to finish.
+      </p>
+      <Button href="/contact" variant="primary">Schedule a Consultation</Button>
+    </div>
+
+    <div class="footer__grid">
+      <!-- Brand + contact -->
+      <div class="footer__brand">
+        <a class="footer__wordmark" href="/" aria-label="Renovation Consulting Co. — home">
+          <BuildingMark size={28} />
+          <span>Renovation Consulting Co.</span>
+        </a>
+        <address class="footer__contact">
+          <a href="tel:+14153239320">415-323-9320</a>
+          <a href="mailto:info@rcc-cv.com">info@rcc-cv.com</a>
+          <span>
+            1276 N. Palm Canyon Dr, Suite 109-A<br />
+            Palm Springs, CA 92264
+          </span>
+        </address>
+      </div>
+
+      <!-- Sitemap -->
+      <nav class="footer__col" aria-label="Footer">
+        <h3 class="footer__heading">Explore</h3>
+        <ul>
+          {nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <!-- Legal -->
+      <nav class="footer__col" aria-label="Legal">
+        <h3 class="footer__heading">Information</h3>
+        <ul>
+          {legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__base">
+      <p>&copy; {year} Renovation Consulting Co. All rights reserved.</p>
+      <p>Project management &amp; owner's representation · Palm Springs &amp; the Coachella Valley</p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--ink);
+    color: var(--cream);
+    padding-block: var(--section-y) var(--space-5);
+  }
+  .footer :global(a) {
+    color: var(--cream);
+  }
+  .footer :global(a:hover) {
+    color: var(--blush);
+  }
+
+  /* CTA band */
+  .footer__cta {
+    max-width: 40rem;
+    padding-bottom: var(--space-7);
+    margin-bottom: var(--space-7);
+    border-bottom: 1px solid rgba(251, 247, 242, 0.14);
+  }
+  .footer__cta-title {
+    color: var(--cream);
+    font-size: var(--fs-h2);
+    margin-top: var(--space-2);
+  }
+  .footer__cta-copy {
+    color: rgba(251, 247, 242, 0.7);
+    margin-block: var(--space-3) var(--space-4);
+    max-width: 34rem;
+  }
+
+  /* Grid */
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .footer__wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__contact {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    line-height: 1.6;
+  }
+  .footer__contact span {
+    color: rgba(251, 247, 242, 0.7);
+  }
+
+  .footer__heading {
+    font-family: var(--font-body);
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: rgba(251, 247, 242, 0.55);
+    margin-bottom: var(--space-3);
+  }
+  .footer__col ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .footer__col a {
+    font-size: var(--fs-small);
+  }
+
+  /* Base line */
+  .footer__base {
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
+    border-top: 1px solid rgba(251, 247, 242, 0.14);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2);
+    font-size: var(--fs-small);
+    color: rgba(251, 247, 242, 0.55);
+  }
+
+  @media (min-width: 720px) {
+    .footer__grid {
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

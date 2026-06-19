@@ -1,0 +1,46 @@
+---
+import Container from "./Container.astro";
+
+/**
+ * PageHeader — calm editorial header for interior pages. Sits below the fixed
+ * nav (note the top padding) and gives each stub page an on-brand opening.
+ */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+}
+
+const { eyebrow, title, lede } = Astro.props;
+---
+
+<header class="page-header">
+  <Container>
+    <div class="page-header__inner" data-reveal>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1 class="page-header__title">{title}</h1>
+      {lede && <p class="lede page-header__lede">{lede}</p>}
+    </div>
+  </Container>
+</header>
+
+<style>
+  .page-header {
+    background-color: var(--cream);
+    padding-top: calc(var(--nav-h) + clamp(3rem, 8vw, 6rem));
+    padding-bottom: clamp(2rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--greige);
+  }
+  .page-header__inner {
+    max-width: 52rem;
+  }
+  .page-header__title {
+    font-size: var(--fs-display);
+    font-weight: 300;
+    margin-top: var(--space-3);
+  }
+  .page-header__lede {
+    margin-top: var(--space-4);
+    color: var(--greige-deep);
+  }
+</style>

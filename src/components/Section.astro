@@ -1,0 +1,69 @@
+---
+import Container from "./Container.astro";
+
+/**
+ * Section — vertical rhythm + optional background tone and built-in Container.
+ * Pass `container={false}` when you need full-bleed control inside.
+ */
+interface Props {
+  tone?: "cream" | "blush" | "ink";
+  width?: "default" | "narrow";
+  container?: boolean;
+  reveal?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const {
+  tone = "cream",
+  width = "default",
+  container = true,
+  reveal = false,
+  id,
+  class: className = "",
+} = Astro.props;
+---
+
+<section
+  id={id}
+  class:list={["section", `section--${tone}`, className]}
+  data-reveal={reveal ? "" : undefined}
+>
+  {
+    container ? (
+      <Container width={width}>
+        <slot />
+      </Container>
+    ) : (
+      <slot />
+    )
+  }
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-y);
+  }
+
+  .section--cream {
+    background-color: var(--cream);
+    color: var(--ink);
+  }
+
+  .section--blush {
+    background-color: var(--blush);
+    color: var(--ink);
+  }
+
+  .section--ink {
+    background-color: var(--ink);
+    color: var(--cream);
+  }
+
+  .section--ink :global(h1),
+  .section--ink :global(h2),
+  .section--ink :global(h3),
+  .section--ink :global(h4) {
+    color: var(--cream);
+  }
+</style>

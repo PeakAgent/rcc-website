@@ -1,0 +1,379 @@
+---
+import BuildingMark from "./BuildingMark.astro";
+import Button from "./Button.astro";
+
+/**
+ * Global navigation.
+ * `overHero` makes the bar transparent at the top of the page; on scroll it
+ * solidifies to cream with a subtle bottom border (handled in the script).
+ * On pages without a hero it starts solid.
+ */
+interface Props {
+  overHero?: boolean;
+}
+
+const { overHero = false } = Astro.props;
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/process", label: "Process" },
+  { href: "/journal", label: "Journal" },
+  { href: "/contact", label: "Contact" },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<header
+  class:list={["nav", { "nav--over-hero": overHero, "nav--solid": !overHero }]}
+  data-nav
+>
+  <div class="nav__inner">
+    <a class="wordmark" href="/" aria-label="Renovation Consulting Co. — home">
+      <BuildingMark class="wordmark__mark" size={30} />
+      <span class="wordmark__text">
+        Renovation<span class="wordmark__break"> </span>Consulting Co.
+      </span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class:list={["nav__link", { "is-active": isActive(link.href) }]}
+                aria-current={isActive(link.href) ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav__cta">
+      <Button href="/contact" variant="primary">Schedule a Consultation</Button>
+    </div>
+
+    <button
+      class="nav__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-toggle
+    >
+      <span class="visually-hidden">Open menu</span>
+      <span class="nav__toggle-bars" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+  </div>
+</header>
+
+<!-- Full-screen mobile overlay menu -->
+<div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+  <nav class="mobile-menu__nav" aria-label="Mobile">
+    <ul>
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={["mobile-menu__link", { "is-active": isActive(link.href) }]}
+              aria-current={isActive(link.href) ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="mobile-menu__cta">
+      <Button href="/contact" variant="primary">Schedule a Consultation</Button>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    height: var(--nav-h);
+    transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease),
+      box-shadow 0.4s var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+
+  .nav__inner {
+    max-width: var(--container-max);
+    height: 100%;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  /* Wordmark */
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--terracotta);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .wordmark:hover {
+    color: var(--terracotta-deep);
+  }
+  .wordmark__mark {
+    color: var(--terracotta);
+  }
+
+  /* Desktop links */
+  .nav__links {
+    display: none;
+  }
+  .nav__links ul {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2.2vw, 2.25rem);
+    list-style: none;
+    padding: 0;
+  }
+  .nav__link {
+    position: relative;
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding-block: 0.25rem;
+  }
+  .nav__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: var(--terracotta);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .nav__link:hover {
+    color: var(--ink);
+  }
+  .nav__link:hover::after,
+  .nav__link.is-active::after {
+    transform: scaleX(1);
+  }
+  .nav__link.is-active {
+    color: var(--ink);
+  }
+
+  .nav__cta {
+    display: none;
+  }
+
+  /* Transparent-over-hero state: light text for legibility on imagery */
+  .nav--over-hero:not(.is-scrolled) .wordmark,
+  .nav--over-hero:not(.is-scrolled) .wordmark__mark {
+    color: var(--cream);
+  }
+  .nav--over-hero:not(.is-scrolled) .nav__link {
+    color: var(--cream);
+  }
+  .nav--over-hero:not(.is-scrolled) .nav__toggle-bars span {
+    background-color: var(--cream);
+  }
+
+  /* Solid state (default for non-hero pages, and hero pages once scrolled) */
+  .nav--solid,
+  .nav.is-scrolled {
+    background-color: var(--cream);
+    border-bottom-color: var(--greige);
+    box-shadow: 0 1px 0 rgba(36, 30, 26, 0.02);
+  }
+
+  /* Mobile toggle */
+  .nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.5rem;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .nav__toggle-bars {
+    position: relative;
+    display: block;
+    width: 26px;
+    height: 12px;
+  }
+  .nav__toggle-bars span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background-color: var(--ink);
+    transition: transform 0.3s var(--ease), opacity 0.3s var(--ease),
+      background-color 0.3s var(--ease);
+  }
+  .nav__toggle-bars span:first-child {
+    top: 0;
+  }
+  .nav__toggle-bars span:last-child {
+    bottom: 0;
+  }
+
+  /* Full-screen mobile menu */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background-color: var(--cream);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s var(--ease), visibility 0.4s var(--ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobile-menu[hidden] {
+    display: flex; /* keep transitionable; visibility handles hiding */
+  }
+  .mobile-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .mobile-menu__nav {
+    text-align: center;
+    padding: var(--space-6) var(--gutter);
+    width: 100%;
+  }
+  .mobile-menu__nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .mobile-menu__link {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .mobile-menu__link.is-active {
+    color: var(--terracotta);
+  }
+  .mobile-menu__cta :global(.btn) {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  /* Open-state animation for the hamburger -> close */
+  :global(body.menu-open) .nav__toggle-bars span {
+    background-color: var(--ink);
+  }
+  :global(body.menu-open) .nav__toggle-bars span:first-child {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+  :global(body.menu-open) .nav__toggle-bars span:last-child {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+  }
+  :global(body.menu-open) {
+    overflow: hidden;
+  }
+
+  /* Breakpoints */
+  @media (min-width: 920px) {
+    .nav__links,
+    .nav__cta {
+      display: block;
+    }
+    .nav__links {
+      display: flex;
+    }
+    .nav__toggle {
+      display: none;
+    }
+    .wordmark {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav,
+    .nav__link::after,
+    .nav__toggle-bars span,
+    .mobile-menu {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Solidify the nav once the user scrolls past a small threshold.
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  const setScrolled = () => {
+    if (!nav) return;
+    nav.classList.toggle("is-scrolled", window.scrollY > 24);
+  };
+  setScrolled();
+  window.addEventListener("scroll", setScrolled, { passive: true });
+
+  // Mobile overlay menu.
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+
+  const closeMenu = () => {
+    if (!toggle || !menu) return;
+    menu.classList.remove("is-open");
+    menu.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("menu-open");
+  };
+
+  const openMenu = () => {
+    if (!toggle || !menu) return;
+    menu.hidden = false;
+    // next frame so the transition runs
+    requestAnimationFrame(() => menu.classList.add("is-open"));
+    toggle.setAttribute("aria-expanded", "true");
+    document.body.classList.add("menu-open");
+  };
+
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    open ? closeMenu() : openMenu();
+  });
+
+  // Close on link click and on Escape.
+  menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+</script>

@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Section from "../components/Section.astro";
+---
+
+<BaseLayout
+  title="Schedule a Consultation"
+  description="Schedule a consultation with Renovation Consulting Co. — construction project management and owner's representation in Palm Springs and the Coachella Valley."
+>
+  <PageHeader
+    eyebrow="Let's talk"
+    title="Schedule a Consultation"
+    lede="A calm, considered conversation about your project. The full consultation form arrives in Phase 1 — reach out directly in the meantime."
+  />
+
+  <Section tone="cream" reveal={true}>
+    <div class="contact">
+      <div class="contact__intro">
+        <p class="eyebrow">Coming soon</p>
+        <h2>The consultation form is on its way.</h2>
+        <p class="text-muted measure">
+          This page will hold a simple, focused form. For now, the quickest way
+          to start is a call or an email.
+        </p>
+      </div>
+
+      <div class="contact__details">
+        <h3 class="contact__heading">Direct</h3>
+        <address class="contact__address">
+          <a href="tel:+14153239320">415-323-9320</a>
+          <a href="mailto:info@rcc-cv.com">info@rcc-cv.com</a>
+          <span class="text-muted">
+            1276 N. Palm Canyon Dr, Suite 109-A<br />
+            Palm Springs, CA 92264
+          </span>
+        </address>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .contact__intro h2 {
+    margin-block: var(--space-3) var(--space-3);
+  }
+  .contact__heading {
+    font-family: var(--font-body);
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--greige-deep);
+    margin-bottom: var(--space-3);
+  }
+  .contact__address {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-family: var(--font-display);
+  }
+  .contact__address span {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    margin-top: var(--space-2);
+  }
+  @media (min-width: 760px) {
+    .contact {
+      grid-template-columns: 1.5fr 1fr;
+      gap: var(--space-7);
+    }
+  }
+</style>

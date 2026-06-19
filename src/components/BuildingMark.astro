@@ -1,0 +1,40 @@
+---
+/**
+ * BuildingMark — a minimal single-stroke architectural mark for the wordmark.
+ * A pitched-roof structure with a doorway, drawn as one continuous line set.
+ * Inherits color via currentColor (set to terracotta where used).
+ */
+interface Props {
+  class?: string;
+  size?: number;
+}
+
+const { class: className = "", size = 28 } = Astro.props;
+---
+
+<svg
+  class:list={["building-mark", className]}
+  width={size}
+  height={size}
+  viewBox="0 0 32 32"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <!-- pitched roof + walls -->
+  <path d="M4 14 L16 5 L28 14" />
+  <path d="M7 12.75 V27 H25 V12.75" />
+  <!-- doorway -->
+  <path d="M14 27 V19 H18 V27" />
+</svg>
+
+<style>
+  .building-mark {
+    display: block;
+    flex: none;
+  }
+</style>

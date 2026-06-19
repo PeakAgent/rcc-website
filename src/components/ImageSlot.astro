@@ -1,0 +1,80 @@
+---
+/**
+ * ImageSlot — a clean, styled placeholder marking where Daniel's *real* project
+ * photography will go.
+ *
+ * REAL PHOTO SLOT — replace with Daniel's actual project photography.
+ * Do NOT drop stock/atmosphere imagery here and imply it is his completed work.
+ *
+ * `ratio` accepts any CSS aspect-ratio (e.g. "4 / 3", "16 / 9", "3 / 4").
+ */
+interface Props {
+  ratio?: string;
+  label?: string;
+  caption?: string;
+  class?: string;
+}
+
+const {
+  ratio = "4 / 3",
+  label = "Project photography",
+  caption,
+  class: className = "",
+} = Astro.props;
+---
+
+<figure class:list={["image-slot", className]}>
+  <div class="image-slot__frame" style={`aspect-ratio: ${ratio};`}>
+    <span class="image-slot__mark" aria-hidden="true">
+      <svg width="40" height="40" viewBox="0 0 32 32" fill="none"
+        stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M5 14 L16 6 L27 14" />
+        <path d="M8 12.75 V26 H24 V12.75" />
+        <path d="M14 26 V19 H18 V26" />
+      </svg>
+    </span>
+    <span class="image-slot__label">{label}</span>
+    <span class="image-slot__note">Image coming soon</span>
+  </div>
+  {caption && <figcaption class="image-slot__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .image-slot {
+    margin: 0;
+  }
+  .image-slot__frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    background-color: var(--blush);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius);
+    color: var(--greige-deep);
+    overflow: hidden;
+  }
+  .image-slot__mark {
+    color: var(--greige-deep);
+    opacity: 0.7;
+  }
+  .image-slot__label {
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+  }
+  .image-slot__note {
+    font-size: var(--fs-small);
+    color: var(--greige);
+  }
+  .image-slot__caption {
+    margin-top: var(--space-2);
+    font-size: var(--fs-small);
+    color: var(--greige-deep);
+  }
+</style>
