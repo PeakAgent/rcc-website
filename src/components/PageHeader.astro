@@ -2,45 +2,135 @@
 import Container from "./Container.astro";
 
 /**
- * PageHeader — calm editorial header for interior pages. Sits below the fixed
- * nav (note the top padding) and gives each stub page an on-brand opening.
+ * PageHeader — interior page opening. With `image` it renders a cinematic dark
+ * banner (atmosphere photo + warm overlay + grain-friendly gradient fallback);
+ * without it, a calm cream header. Sits below the fixed nav.
  */
 interface Props {
   eyebrow?: string;
   title: string;
   lede?: string;
+  image?: string;
+  imageAlt?: string;
+  fallback?: "dusk" | "ink" | "clay";
 }
-
-const { eyebrow, title, lede } = Astro.props;
+const {
+  eyebrow,
+  title,
+  lede,
+  image,
+  imageAlt = "",
+  fallback = "dusk",
+} = Astro.props;
+const dark = !!image;
 ---
 
-<header class="page-header">
+<header class:list={["ph", dark ? "ph--image" : "ph--plain", `fb-${fallback}`]}>
+  {
+    dark && (
+      <div class="ph__bg">
+        <img class="ph__img" data-img data-parallax src={image} alt={imageAlt} fetchpriority="high" decoding="async" />
+        <div class="ph__overlay" aria-hidden="true" />
+      </div>
+    )
+  }
   <Container>
-    <div class="page-header__inner" data-reveal>
-      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h1 class="page-header__title">{title}</h1>
-      {lede && <p class="lede page-header__lede">{lede}</p>}
+    <div class="ph__inner" data-reveal-group>
+      {eyebrow && <p class="eyebrow eyebrow--rule ph__eyebrow">{eyebrow}</p>}
+      <h1 class="ph__title">{title}</h1>
+      {lede && <p class="lede ph__lede">{lede}</p>}
     </div>
   </Container>
 </header>
 
 <style>
-  .page-header {
-    background-color: var(--cream);
+  .ph {
+    position: relative;
+    overflow: hidden;
+  }
+  .ph--plain {
+    background: var(--cream);
     padding-top: calc(var(--nav-h) + clamp(3rem, 8vw, 6rem));
-    padding-bottom: clamp(2rem, 5vw, 4rem);
-    border-bottom: 1px solid var(--greige);
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--hairline);
   }
-  .page-header__inner {
-    max-width: 52rem;
+  .ph--image {
+    padding-top: calc(var(--nav-h) + clamp(4rem, 11vw, 9rem));
+    padding-bottom: clamp(3.5rem, 8vw, 7rem);
+    color: var(--cream);
   }
-  .page-header__title {
+
+  .ph__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .ph__img {
+    position: absolute;
+    inset: -9% 0;
+    width: 100%;
+    height: 118%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-out);
+    will-change: transform;
+  }
+  .ph__img.is-loaded {
+    opacity: 1;
+  }
+  .ph__img.is-failed {
+    display: none;
+  }
+  .ph__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(20, 15, 12, 0.82) 0%,
+      rgba(28, 21, 17, 0.5) 50%,
+      rgba(36, 30, 26, 0.34) 100%
+    );
+  }
+
+  .ph__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 56rem;
+  }
+  .ph__eyebrow {
+    margin-bottom: var(--space-3);
+  }
+  .ph--image .ph__eyebrow {
+    color: var(--blush);
+  }
+  .ph__title {
     font-size: var(--fs-display);
     font-weight: 300;
-    margin-top: var(--space-3);
   }
-  .page-header__lede {
+  .ph--image .ph__title {
+    color: var(--cream);
+  }
+  .ph__lede {
     margin-top: var(--space-4);
+  }
+  .ph--plain .ph__lede {
     color: var(--greige-deep);
+  }
+  .ph--image .ph__lede {
+    color: rgba(251, 247, 242, 0.86);
+  }
+
+  /* gradient fallbacks reused beneath banner image */
+  .ph--image.fb-dusk {
+    background: linear-gradient(150deg, #3a201a 0%, #6e2f20 55%, #241e1a 100%);
+  }
+  .ph--image.fb-ink {
+    background: linear-gradient(150deg, #3a322b 0%, #241e1a 100%);
+  }
+  .ph--image.fb-clay {
+    background: linear-gradient(150deg, #c8745a 0%, #8f3220 100%);
+  }
+  :global(html:not(.js)) .ph__img {
+    opacity: 1;
   }
 </style>

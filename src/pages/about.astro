@@ -2,51 +2,48 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Section from "../components/Section.astro";
+import Figure from "../components/Figure.astro";
 import ImageSlot from "../components/ImageSlot.astro";
 import Button from "../components/Button.astro";
 import Stat from "../components/Stat.astro";
 import Quote from "../components/Quote.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { images } from "../data/images";
 
 const values = [
-  {
-    title: "Clarity over jargon",
-    body: "You'll always understand where your project stands and what the next decision is. No mystery, no runaround.",
-  },
-  {
-    title: "Your interests, first",
-    body: "We represent you — not the contractor. Every recommendation is measured against your goals and your budget.",
-  },
-  {
-    title: "Calm, methodical control",
-    body: "Construction is chaotic by default. Our job is to make it orderly, so the process feels as considered as the result.",
-  },
-  {
-    title: "Honesty, even when it's hard",
-    body: "If something isn't right, you'll hear it early and plainly — while it's still inexpensive to fix.",
-  },
+  { num: "01", title: "Clarity over jargon", body: "You'll always understand where the project stands and what the next decision is. No mystery, no runaround." },
+  { num: "02", title: "Your interests, first", body: "We represent you — not the contractor. Every recommendation is measured against your goals and your budget." },
+  { num: "03", title: "Calm, methodical control", body: "Construction is chaotic by default. Our job is to make it orderly, so the process feels as considered as the result." },
+  { num: "04", title: "Honesty, even when it's hard", body: "If something isn't right, you'll hear it early and plainly — while it's still inexpensive to fix." },
 ];
+
+const areas = ["Palm Springs", "Rancho Mirage", "Palm Desert", "La Quinta", "Indian Wells", "Cathedral City"];
 ---
 
 <BaseLayout
   title="About"
-  description="Daniel Hekkel — construction project manager and owner's representative with 20+ years of experience, bringing calm, methodical oversight to renovations and custom builds across Palm Springs and the Coachella Valley."
+  description="Daniel Hekkel — construction manager and owner's representative with 20+ years of experience, bringing calm, methodical oversight to high-end homes across Palm Springs and the Coachella Valley."
+  image={images.desert.src}
 >
   <PageHeader
     eyebrow="Who we are"
     title="Twenty years of bringing order to construction."
-    lede="Renovation Consulting Co. is led by Daniel Hekkel — a construction project manager and owner's representative who works for one person on every project: you."
+    lede="Renovation Consulting Co. is led by Daniel Hekkel — a construction manager and owner's representative who works for one person on every project: you."
+    image={images.desert.src}
+    imageAlt={images.desert.alt}
+    fallback="clay"
   />
 
   <!-- Bio -->
   <Section tone="cream">
     <div class="bio">
-      <div class="bio__media" data-reveal>
+      <div class="bio__media" data-reveal-clip>
         <!-- REAL PHOTO SLOT — replace with Daniel Hekkel's actual portrait. -->
         <ImageSlot ratio="3 / 4" label="Daniel Hekkel" />
       </div>
-      <div class="bio__text" data-reveal>
-        <p class="eyebrow">Daniel Hekkel</p>
-        <h2>An owner's advocate, not a contractor.</h2>
+      <div class="bio__text" data-reveal-group>
+        <p class="eyebrow eyebrow--rule">Daniel Hekkel</p>
+        <h2>A construction manager who works for you.</h2>
         <p>
           Over more than two decades in construction, Daniel has seen the same
           pattern again and again: projects rarely fail on craft. They fail on
@@ -55,9 +52,10 @@ const values = [
         </p>
         <p>
           He founded Renovation Consulting Co. to supply exactly that missing
-          piece. As an owner's representative, Daniel sits on the client's side
-          of the table, managing budgets, contractors, and timelines so that
-          building a home doesn't require becoming a construction manager.
+          piece. As a construction manager and owner's representative, Daniel
+          sits on the client's side of the table, running budgets, builders, and
+          timelines so that creating a home doesn't require becoming a
+          construction manager yourself.
         </p>
         <p>
           Based in Palm Springs, he works across the Coachella Valley — a
@@ -69,24 +67,25 @@ const values = [
     </div>
   </Section>
 
-  <!-- Quote -->
-  <Section tone="blush" reveal={true}>
+  <!-- Quote band -->
+  <Section tone="ink">
     <Quote cite="Daniel Hekkel" role="Founder, Renovation Consulting Co.">
       My measure of success is simple: the client got to enjoy their project
       instead of managing it.
     </Quote>
   </Section>
 
-  <!-- Approach / values -->
-  <Section tone="cream" reveal={true}>
-    <div class="section-head">
-      <p class="eyebrow">How we work</p>
-      <h2>The principles behind every project.</h2>
+  <!-- Values -->
+  <Section tone="cream">
+    <div class="head" data-reveal>
+      <p class="eyebrow eyebrow--rule">How we work</p>
+      <h2 class="head__title">The principles behind every project.</h2>
     </div>
-    <div class="values">
+    <div class="values" data-reveal-group>
       {
         values.map((v) => (
           <div class="value-item">
+            <span class="index-num">{v.num}</span>
             <h3>{v.title}</h3>
             <p class="text-muted">{v.body}</p>
           </div>
@@ -95,41 +94,54 @@ const values = [
     </div>
   </Section>
 
+  <!-- Texture band image -->
+  <Section tone="cream" container={false}>
+    <div class="band" data-reveal-clip>
+      <Figure
+        src={images.interiorWarm.src}
+        alt={images.interiorWarm.alt}
+        fallback="sand"
+        ratio="21 / 9"
+        parallax={true}
+        clip={false}
+      />
+    </div>
+  </Section>
+
   <!-- Stats -->
-  <Section tone="blush" reveal={true}>
-    <div class="about-stats">
-      <Stat figure="20+" label="Years managing construction projects" />
+  <Section tone="blush">
+    <div class="stats" data-reveal-group>
+      <Stat figure="20+" label="Years managing construction" />
       <Stat figure="Coachella Valley" label="Palm Springs and the surrounding desert" />
       <Stat figure="Owner-first" label="Always representing the client's interests" />
     </div>
   </Section>
 
   <!-- Service area -->
-  <Section tone="cream" reveal={true}>
+  <Section tone="cream">
     <div class="area">
-      <div>
-        <p class="eyebrow">Where we work</p>
-        <h2>Palm Springs &amp; the Coachella Valley.</h2>
+      <div class="area__text" data-reveal-group>
+        <p class="eyebrow eyebrow--rule">Where we work</p>
+        <h2>Palm Springs & the Coachella Valley.</h2>
         <p class="text-muted measure">
           Renovation Consulting Co. serves clients throughout the desert
-          communities — Palm Springs, Rancho Mirage, Palm Desert, La Quinta,
-          Indian Wells, and the surrounding valley. If you're considering a
-          project in the area, the first conversation is always free.
+          communities. If you're considering a project in the area, the first
+          conversation is always free.
         </p>
-        <div class="area__cta">
-          <Button href="/contact" variant="primary">Schedule a Consultation</Button>
-        </div>
+        <Button href="/contact" variant="primary">Schedule a Consultation</Button>
       </div>
-      <ul class="area__list">
-        <li>Palm Springs</li>
-        <li>Rancho Mirage</li>
-        <li>Palm Desert</li>
-        <li>La Quinta</li>
-        <li>Indian Wells</li>
-        <li>Cathedral City</li>
+      <ul class="area__list" data-reveal-group>
+        {areas.map((a) => <li>{a}</li>)}
       </ul>
     </div>
   </Section>
+
+  <CtaBand
+    title="Let's build something considered."
+    text="Tell Daniel about your project and what you're hoping to achieve."
+    image={images.exteriorDetail.src}
+    imageAlt={images.exteriorDetail.alt}
+  />
 </BaseLayout>
 
 <style>
@@ -147,42 +159,53 @@ const values = [
       grid-template-columns: 0.85fr 1.15fr;
       gap: var(--space-7);
     }
+    .bio__media {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+    }
   }
 
-  .section-head {
-    max-width: 42rem;
+  .head {
+    max-width: 44rem;
     margin-bottom: var(--space-6);
   }
-  .section-head h2 {
+  .head__title {
     margin-top: var(--space-3);
   }
 
   .values {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-5);
+    gap: var(--space-5) var(--space-6);
   }
   .value-item h3 {
     font-size: var(--fs-h4);
     font-weight: 500;
-    margin-bottom: var(--space-2);
+    margin-block: var(--space-2);
     padding-top: var(--space-3);
-    border-top: 1px solid var(--greige);
+    border-top: 1px solid var(--hairline);
   }
   @media (min-width: 720px) {
     .values {
       grid-template-columns: 1fr 1fr;
-      gap: var(--space-5) var(--space-6);
     }
   }
 
-  .about-stats {
+  .band {
+    padding-inline: var(--gutter);
+  }
+  .band :global(.figure) {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+
+  .stats {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-5);
   }
   @media (min-width: 720px) {
-    .about-stats {
+    .stats {
       grid-template-columns: repeat(3, 1fr);
     }
   }
@@ -196,7 +219,7 @@ const values = [
   .area h2 {
     margin-block: var(--space-3) var(--space-3);
   }
-  .area__cta {
+  .area__text :global(.btn) {
     margin-top: var(--space-5);
   }
   .area__list {
@@ -204,14 +227,13 @@ const values = [
     padding: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
   }
   .area__list li {
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 300;
     padding-block: var(--space-2);
-    border-top: 1px solid var(--greige);
+    border-top: 1px solid var(--hairline);
   }
   @media (min-width: 860px) {
     .area {

@@ -1,0 +1,100 @@
+---
+import Container from "./Container.astro";
+import Button from "./Button.astro";
+import { images } from "../data/images";
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  text?: string;
+  image?: string;
+  imageAlt?: string;
+}
+const {
+  eyebrow = "Start the conversation",
+  title,
+  text,
+  image = images.pool.src,
+  imageAlt = images.pool.alt,
+} = Astro.props;
+---
+
+<section class="cta-band">
+  <div class="cta-band__bg">
+    <img class="cta-band__img" data-img data-parallax src={image} alt={imageAlt} loading="lazy" decoding="async" />
+    <div class="cta-band__overlay" aria-hidden="true"></div>
+  </div>
+  <Container>
+    <div class="cta-band__inner" data-reveal>
+      <p class="eyebrow eyebrow--rule cta-band__eyebrow">{eyebrow}</p>
+      <h2 class="cta-band__title">{title}</h2>
+      {text && <p class="cta-band__text">{text}</p>}
+      <Button href="/contact" variant="primary">Schedule a Consultation</Button>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .cta-band {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(5rem, 12vw, 11rem);
+    background: linear-gradient(150deg, #3a201a 0%, #6e2f20 55%, #241e1a 100%);
+  }
+  .cta-band__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .cta-band__img {
+    position: absolute;
+    inset: -9% 0;
+    width: 100%;
+    height: 118%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-out);
+    will-change: transform;
+  }
+  .cta-band__img.is-loaded {
+    opacity: 1;
+  }
+  .cta-band__img.is-failed {
+    display: none;
+  }
+  .cta-band__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      rgba(20, 15, 12, 0.9) 0%,
+      rgba(28, 21, 17, 0.66) 50%,
+      rgba(36, 30, 26, 0.4) 100%
+    );
+  }
+  .cta-band__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 44rem;
+  }
+  .cta-band__eyebrow {
+    color: var(--blush);
+    margin-bottom: var(--space-3);
+  }
+  .cta-band__title {
+    color: var(--cream);
+    font-size: var(--fs-display);
+    font-weight: 300;
+  }
+  .cta-band__text {
+    color: rgba(251, 247, 242, 0.82);
+    margin-block: var(--space-3) var(--space-5);
+    max-width: 40ch;
+  }
+  .cta-band__title + :global(.btn) {
+    margin-top: var(--space-5);
+  }
+  :global(html:not(.js)) .cta-band__img {
+    opacity: 1;
+  }
+</style>

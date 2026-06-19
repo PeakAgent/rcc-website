@@ -9,7 +9,7 @@
  */
 interface Props {
   href?: string;
-  variant?: "primary" | "outline" | "ghost" | "light";
+  variant?: "primary" | "outline" | "ghost" | "light" | "hero-ghost";
   type?: "button" | "submit" | "reset";
   class?: string;
   [key: string]: unknown;
@@ -37,8 +37,8 @@ const Tag = href ? "a" : "button";
 
 <style>
   .btn {
-    --btn-pad-y: 0.9rem;
-    --btn-pad-x: 1.6rem;
+    --btn-pad-y: 1rem;
+    --btn-pad-x: 1.8rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -53,8 +53,22 @@ const Tag = href ? "a" : "button";
     cursor: pointer;
     border: 1px solid transparent;
     border-radius: var(--radius);
-    transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
-      border-color 0.25s var(--ease), transform 0.25s var(--ease);
+    transition: background-color 0.3s var(--ease), color 0.3s var(--ease),
+      border-color 0.3s var(--ease), transform 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
+  }
+
+  /* hero-ghost — transparent w/ cream outline for dark hero grounds */
+  .btn--hero-ghost {
+    background-color: rgba(251, 247, 242, 0.06);
+    color: var(--cream);
+    border-color: rgba(251, 247, 242, 0.5);
+    backdrop-filter: blur(4px);
+  }
+  .btn--hero-ghost:hover {
+    background-color: var(--cream);
+    color: var(--ink);
+    border-color: var(--cream);
   }
 
   .btn:hover {

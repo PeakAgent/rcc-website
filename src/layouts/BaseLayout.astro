@@ -33,6 +33,11 @@ const ogImage = new URL(image, Astro.site).href;
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- JS flag: animation "start hidden" states only apply when JS is live,
+         so content can never be stranded invisible if a script fails. -->
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
@@ -78,13 +83,45 @@ const ogImage = new URL(image, Astro.site).href;
     <Footer />
 
     <script>
-      // Scroll-reveal: gentle fade + translate-up as elements enter view.
-      // Honors prefers-reduced-motion (elements are simply shown).
+      // --- Image loading: fade in on load, fall back to gradient on error ---
+      // load/error don't bubble, so listen in the capture phase.
+      const markImg = (img: HTMLImageElement) => {
+        if (img.dataset.bound) return;
+        img.dataset.bound = "1";
+        if (img.complete) {
+          img.naturalWidth > 0
+            ? img.classList.add("is-loaded")
+            : img.classList.add("is-failed");
+        }
+      };
+      document.querySelectorAll<HTMLImageElement>("img[data-img]").forEach(markImg);
+      document.addEventListener(
+        "load",
+        (e) => {
+          const t = e.target as HTMLElement;
+          if (t instanceof HTMLImageElement && t.dataset.img !== undefined)
+            t.classList.add("is-loaded");
+        },
+        true
+      );
+      document.addEventListener(
+        "error",
+        (e) => {
+          const t = e.target as HTMLElement;
+          if (t instanceof HTMLImageElement && t.dataset.img !== undefined)
+            t.classList.add("is-failed");
+        },
+        true
+      );
+
       const prefersReduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
 
-      const items = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      // --- Scroll reveal (all variants share the is-visible toggle) ---
+      const revealSel =
+        "[data-reveal], [data-reveal-clip], [data-reveal-group], .reveal-lines";
+      const items = document.querySelectorAll<HTMLElement>(revealSel);
 
       if (prefersReduced || !("IntersectionObserver" in window)) {
         items.forEach((el) => el.classList.add("is-visible"));
@@ -98,9 +135,38 @@ const ogImage = new URL(image, Astro.site).href;
               }
             });
           },
-          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+          { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
         );
         items.forEach((el) => observer.observe(el));
+      }
+
+      // --- Gentle parallax for [data-parallax] images ---
+      if (!prefersReduced) {
+        const layers = Array.from(
+          document.querySelectorAll<HTMLElement>("[data-parallax]")
+        );
+        if (layers.length) {
+          let ticking = false;
+          const update = () => {
+            const vh = window.innerHeight;
+            layers.forEach((el) => {
+              const r = el.getBoundingClientRect();
+              if (r.bottom < 0 || r.top > vh) return;
+              const progress = (r.top + r.height / 2 - vh / 2) / vh; // -0.5..0.5
+              el.style.transform = `translate3d(0, ${(-progress * 7).toFixed(2)}%, 0)`;
+            });
+            ticking = false;
+          };
+          const onScroll = () => {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(update);
+            }
+          };
+          window.addEventListener("scroll", onScroll, { passive: true });
+          window.addEventListener("resize", onScroll, { passive: true });
+          update();
+        }
       }
     </script>
   </body>

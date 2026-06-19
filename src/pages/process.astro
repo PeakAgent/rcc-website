@@ -2,143 +2,178 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Section from "../components/Section.astro";
-import ProcessStep from "../components/ProcessStep.astro";
-import Button from "../components/Button.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { images } from "../data/images";
+
+const steps = [
+  { num: "01", title: "Listen & assess", body: "Every project begins with understanding yours — your goals, your property, your budget, and your timeline. We assess what's realistic and tell you plainly what the project actually involves before any commitments are made." },
+  { num: "02", title: "Plan & budget", body: "We translate intentions into a clear scope and a realistic budget on paper. The decisions that drive cost — selections, allowances, and sequencing — get made early, while they're still inexpensive to make." },
+  { num: "03", title: "Bid & select", body: "We invite the right contractors, level their bids so you're comparing like for like, and review every contract carefully. You choose your team with full information, not a sales pitch." },
+  { num: "04", title: "Build & oversee", body: "Once work begins, we're your presence on site — coordinating trades, verifying quality, tracking the schedule, and resolving issues early. You get steady, honest reporting instead of silence." },
+  { num: "05", title: "Control cost & change", body: "Change orders and pay applications are reviewed, priced, and approved deliberately. The budget always reflects decisions you actually made — no quiet drift, no end-of-project surprises." },
+  { num: "06", title: "Close out & hand over", body: "We manage the punch list, final inspections, warranties, and documentation, so the project ends as cleanly as it began — complete, documented, and fully yours." },
+];
 ---
 
 <BaseLayout
   title="Process"
-  description="A clear, orderly approach to managing construction — from listening and planning through bidding, building, and a clean close-out. How Renovation Consulting Co. keeps projects calm and on course."
+  description="A clear, orderly approach to managing construction — from listening and planning through bidding, building, and a clean close-out. How Renovation Consulting Co. keeps high-end desert projects calm and on course."
+  image={images.lines.src}
 >
   <PageHeader
     eyebrow="How it works"
     title="A calm, ordered method — start to finish."
     lede="Good management is a sequence, not a scramble. This is how we take a project from first conversation to final walkthrough, keeping you informed at every step."
+    image={images.lines.src}
+    imageAlt={images.lines.alt}
+    fallback="ink"
   />
 
-  <!-- Steps -->
+  <!-- Timeline -->
   <Section tone="cream">
-    <ol class="steps" data-reveal>
-      <ProcessStep number="01" title="Listen & assess">
-        Every project begins with understanding yours — your goals, your
-        property, your budget, and your timeline. We assess what's realistic and
-        tell you plainly what the project actually involves before any
-        commitments are made.
-      </ProcessStep>
-      <ProcessStep number="02" title="Plan & budget">
-        We translate intentions into a clear scope and a realistic budget on
-        paper. The decisions that drive cost — selections, allowances, and
-        sequencing — get made early, while they're still inexpensive to make.
-      </ProcessStep>
-      <ProcessStep number="03" title="Bid & select">
-        We invite the right contractors, level their bids so you're comparing
-        like for like, and review every contract carefully. You choose your
-        team with full information, not a sales pitch.
-      </ProcessStep>
-      <ProcessStep number="04" title="Build & oversee">
-        Once work begins, we're your presence on site — coordinating trades,
-        verifying quality, tracking the schedule, and resolving issues early.
-        You get steady, honest reporting instead of silence.
-      </ProcessStep>
-      <ProcessStep number="05" title="Control cost & change">
-        Change orders and pay applications are reviewed, priced, and approved
-        deliberately. The budget always reflects decisions you actually made —
-        no quiet drift, no end-of-project surprises.
-      </ProcessStep>
-      <ProcessStep number="06" title="Close out & hand over">
-        We manage the punch list, final inspections, warranties, and
-        documentation, so the project ends as cleanly as it began — complete,
-        documented, and fully yours.
-      </ProcessStep>
+    <ol class="timeline">
+      {
+        steps.map((s) => (
+          <li class="tl" data-reveal>
+            <div class="tl__marker" aria-hidden="true">
+              <span class="tl__dot" />
+            </div>
+            <div class="tl__num">{s.num}</div>
+            <div class="tl__body">
+              <h2 class="tl__title">{s.title}</h2>
+              <p class="tl__text text-muted">{s.body}</p>
+            </div>
+          </li>
+        ))
+      }
     </ol>
   </Section>
 
-  <!-- What you can expect -->
-  <Section tone="blush" reveal={true}>
-    <div class="expect">
-      <div class="expect__head">
-        <p class="eyebrow">What to expect</p>
-        <h2>The same things, every time.</h2>
+  <!-- What to expect -->
+  <Section tone="ink">
+    <div class="head" data-reveal>
+      <p class="eyebrow eyebrow--rule">What to expect</p>
+      <h2 class="head__title">The same things, every time.</h2>
+    </div>
+    <div class="expect" data-reveal-group>
+      <div class="expect__item">
+        <span class="index-num">01</span>
+        <h3>Steady communication</h3>
+        <p>Regular, plain-language updates so you always know where things stand and what's next.</p>
       </div>
-      <div class="expect__cols">
-        <div>
-          <h3>Steady communication</h3>
-          <p class="text-muted">
-            Regular, plain-language updates so you always know where things
-            stand and what's next.
-          </p>
-        </div>
-        <div>
-          <h3>Transparent numbers</h3>
-          <p class="text-muted">
-            Budgets and change orders you can actually read, tracked and
-            forecast as the project moves.
-          </p>
-        </div>
-        <div>
-          <h3>Fewer surprises</h3>
-          <p class="text-muted">
-            Problems caught early, while they're small — not discovered at the
-            end, when they're not.
-          </p>
-        </div>
+      <div class="expect__item">
+        <span class="index-num">02</span>
+        <h3>Transparent numbers</h3>
+        <p>Budgets and change orders you can actually read, tracked and forecast as the project moves.</p>
+      </div>
+      <div class="expect__item">
+        <span class="index-num">03</span>
+        <h3>Fewer surprises</h3>
+        <p>Problems caught early, while they're small — not discovered at the end, when they're not.</p>
       </div>
     </div>
   </Section>
 
-  <!-- CTA -->
-  <Section tone="ink" reveal={true}>
-    <div class="proc-cta">
-      <p class="eyebrow">Begin</p>
-      <h2>Every project starts with a conversation.</h2>
-      <p>
-        Tell us what you're planning. We'll walk you through how the process
-        would work for your project, specifically.
-      </p>
-      <Button href="/contact" variant="light">Schedule a Consultation</Button>
-    </div>
-  </Section>
+  <CtaBand
+    eyebrow="Begin"
+    title="Every project starts with a conversation."
+    text="Tell us what you're planning. We'll walk you through how the process would work for your project, specifically."
+    image={images.interiorKitchen.src}
+    imageAlt={images.interiorKitchen.alt}
+  />
 </BaseLayout>
 
 <style>
-  .steps {
+  .timeline {
     list-style: none;
     padding: 0;
     margin: 0;
+    max-width: 60rem;
+  }
+  .tl {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.5rem auto 1fr;
+    gap: var(--space-3);
+    padding-bottom: var(--space-6);
+  }
+  .tl:last-child {
+    padding-bottom: 0;
+  }
+  .tl__marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .tl__marker::before {
+    content: "";
+    position: absolute;
+    top: 0.7rem;
+    bottom: -1px;
+    width: 1px;
+    background: var(--hairline);
+  }
+  .tl:last-child .tl__marker::before {
+    display: none;
+  }
+  .tl__dot {
+    position: relative;
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+    margin-top: 0.55rem;
+    background: var(--cream);
+    border: 1px solid var(--terracotta);
+    transform: rotate(45deg);
+  }
+  .tl__num {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    line-height: 1;
+    color: var(--terracotta);
+  }
+  .tl__title {
+    font-size: var(--fs-h3);
+    font-weight: 400;
+    margin-bottom: var(--space-2);
+  }
+  .tl__text {
+    max-width: 58ch;
+  }
+  @media (min-width: 720px) {
+    .tl {
+      grid-template-columns: 2rem 5rem 1fr;
+      gap: var(--space-5);
+      padding-bottom: var(--space-7);
+    }
   }
 
-  .expect__head {
-    max-width: 40rem;
+  .head {
+    max-width: 44rem;
     margin-bottom: var(--space-6);
   }
-  .expect__head h2 {
+  .head__title {
     margin-top: var(--space-3);
   }
-  .expect__cols {
+  .expect {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-5);
   }
-  .expect__cols h3 {
+  .expect__item h3 {
     font-size: var(--fs-h4);
     font-weight: 500;
-    margin-bottom: var(--space-2);
+    margin-block: var(--space-2);
+  }
+  .expect__item p {
+    color: rgba(251, 247, 242, 0.75);
+    font-size: var(--fs-small);
   }
   @media (min-width: 800px) {
-    .expect__cols {
+    .expect {
       grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
     }
-  }
-
-  .proc-cta {
-    max-width: 44rem;
-  }
-  .proc-cta h2 {
-    margin-block: var(--space-3) var(--space-3);
-  }
-  .proc-cta p {
-    color: rgba(251, 247, 242, 0.78);
-    margin-bottom: var(--space-5);
-    max-width: 48ch;
   }
 </style>

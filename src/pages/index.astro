@@ -3,15 +3,20 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
-import ImageSlot from "../components/ImageSlot.astro";
-import Button from "../components/Button.astro";
+import Container from "../components/Container.astro";
+import Figure from "../components/Figure.astro";
+import Marquee from "../components/Marquee.astro";
+import ServiceShowcase from "../components/ServiceShowcase.astro";
 import Stat from "../components/Stat.astro";
-import FeatureCard from "../components/FeatureCard.astro";
 import ProcessStep from "../components/ProcessStep.astro";
 import Quote from "../components/Quote.astro";
+import CtaBand from "../components/CtaBand.astro";
+import Button from "../components/Button.astro";
+import ImageSlot from "../components/ImageSlot.astro";
+import { images } from "../data/images";
 
 const description =
-  "Renovation Consulting Co. — construction project management and owner's representation in Palm Springs and the Coachella Valley. We manage your budget, contractors, and timeline so you don't have to.";
+  "Renovation Consulting Co. — independent construction management and owner's representation for high-end homes in Palm Springs and the Coachella Valley. We manage the budget, the builders, and the schedule so your project is built right.";
 
 const posts = (await getCollection("journal"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -19,222 +24,362 @@ const posts = (await getCollection("journal"))
 
 const dateFmt = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
-  month: "long",
+  month: "short",
   day: "numeric",
 });
+
+const showcaseServices = [
+  {
+    num: "01",
+    title: "Pre-Construction & Planning",
+    body: "Scope, feasibility, and a realistic budget — the early decisions that decide whether everything downstream goes well.",
+    image: images.interiorKitchen,
+  },
+  {
+    num: "02",
+    title: "Budget & Bid Management",
+    body: "Apples-to-apples bid leveling, line-item review, and contracts read closely before you ever sign.",
+    image: images.texture,
+  },
+  {
+    num: "03",
+    title: "Contractor & Trade Oversight",
+    body: "Daily coordination of the builder and trades, site presence, and quality held to the standard you're paying for.",
+    image: images.construction,
+  },
+  {
+    num: "04",
+    title: "Schedule & Critical Path",
+    body: "A real master schedule, tracked against the critical path, with slippage flagged early while it's still cheap to fix.",
+    image: images.lines,
+  },
+  {
+    num: "05",
+    title: "Quality & Close-Out",
+    body: "Punch lists, inspections, warranties, and documentation — a clean, complete handover at the finish.",
+    image: images.interiorWarm,
+  },
+  {
+    num: "06",
+    title: "Owner's Representation",
+    body: "One professional on your side of the table for the whole arc of the project, accountable only to you.",
+    image: images.exteriorDetail,
+  },
+];
+
+const projectTypes = [
+  { title: "Custom Homes", note: "Ground-up builds, managed end to end.", image: images.exteriorDetail },
+  { title: "Estate Renovations", note: "Major remodels and whole-home transformations.", image: images.interiorWarm },
+  { title: "Mid-Century Restorations", note: "Honoring the desert's modernist legacy.", image: images.lines },
+  { title: "Indoor–Outdoor & Pools", note: "Desert living, built to last.", image: images.pool },
+];
+
+const capabilities = [
+  "Construction Management",
+  "Owner's Representation",
+  "Pre-Construction Planning",
+  "Budget & Bid Leveling",
+  "Contractor Oversight",
+  "Schedule Control",
+  "Quality Assurance",
+  "Project Close-Out",
+];
 ---
 
 <BaseLayout
-  title="Construction Project Management in Palm Springs"
+  title="Construction Management & Owner's Representation in Palm Springs"
   description={description}
   overHero={true}
+  image={images.heroExterior.src}
 >
   <Hero
-    eyebrow="Owner's Representation · Palm Springs"
-    title="Your project, managed with intention."
-    subtitle="Daniel Hekkel represents you — not the contractor — managing budget, trades, and timeline so your renovation or custom build stays calm, clear, and on course."
+    eyebrow="Construction Management · Palm Springs"
+    lines={["Construction,", "managed", "with intention."]}
+    subtitle="Renovation Consulting Co. runs the budget, the builders, and the schedule on high-end desert homes — as your independent advocate, accountable only to you."
     ctaLabel="Schedule a Consultation"
     ctaHref="/contact"
+    secondaryLabel="What we manage"
+    secondaryHref="/services"
+    meta={["20+ years in construction", "Palm Springs & the Coachella Valley", "We represent you — not the contractor"]}
   />
 
-  <!-- Positioning -->
-  <Section tone="cream" reveal={true}>
-    <div class="intro">
-      <p class="eyebrow">The role</p>
-      <h2 class="intro__title">
-        One steady point of accountability, from first drawing to final
-        walkthrough.
+  <!-- Manifesto -->
+  <Section tone="cream" id="start">
+    <div class="manifesto" data-reveal-group>
+      <p class="eyebrow eyebrow--rule">The remit</p>
+      <h2 class="manifesto__title">
+        We manage the build so your only job is to
+        <span class="italic-accent">love the result.</span>
       </h2>
-      <div class="intro__cols">
+      <div class="manifesto__cols">
         <p class="lede">
-          A renovation should not require you to learn a new profession. Our work
-          is to carry the budget, the contractors, and the schedule on your
-          behalf — and to make sure the people doing the building answer to your
-          interests.
+          A great home is not just well designed — it's well managed. We bring
+          order to budgets, contracts, trades, and timelines on the most
+          considered projects in the desert.
         </p>
-        <p class="text-muted">
-          With more than twenty years managing construction across the Coachella
-          Valley, Daniel brings order to a process that is usually anything but.
-          You stay informed and in control; you simply don't have to chase it.
-        </p>
-      </div>
-    </div>
-  </Section>
-
-  <!-- Trust strip -->
-  <Section tone="blush" reveal={true}>
-    <div class="stats">
-      <Stat figure="20+" label="Years managing construction projects" />
-      <Stat figure="100%" label="On your side of the table — never the contractor's" />
-      <Stat figure="1" label="Point of accountability, start to finish" />
-      <Stat figure="Palm Springs" label="& the wider Coachella Valley" />
-    </div>
-  </Section>
-
-  <!-- Services overview -->
-  <Section tone="cream" reveal={true}>
-    <div class="section-head">
-      <p class="eyebrow">What we do</p>
-      <h2>Full-service project management.</h2>
-      <p class="lede text-muted">
-        Engaged for the whole arc of a project, or for the parts where an
-        owner's advocate matters most.
-      </p>
-    </div>
-    <div class="card-grid">
-      <FeatureCard number="01" title="Pre-Construction &amp; Planning" href="/services" icon={true}>
-        Scope, feasibility, budgeting, and the early decisions that determine
-        whether everything downstream goes well.
-      </FeatureCard>
-      <FeatureCard number="02" title="Budget &amp; Bid Management" href="/services" icon={true}>
-        Apples-to-apples bid leveling, line-item review, and contracts read
-        carefully before you ever sign them.
-      </FeatureCard>
-      <FeatureCard number="03" title="Contractor Oversight" href="/services" icon={true}>
-        Day-to-day coordination of trades, site visits, and the quality control
-        that keeps standards where you expect them.
-      </FeatureCard>
-      <FeatureCard number="04" title="Schedule &amp; Close-Out" href="/services" icon={true}>
-        Holding the timeline, managing change, and seeing the project through a
-        clean, complete finish.
-      </FeatureCard>
-    </div>
-    <div class="section-cta">
-      <Button href="/services" variant="outline">Explore all services</Button>
-    </div>
-  </Section>
-
-  <!-- Value / why an owner's rep (dark moment) -->
-  <Section tone="ink" reveal={true}>
-    <div class="value">
-      <div class="value__lead">
-        <p class="eyebrow">Why representation</p>
-        <h2>When no one is accountable to you, everything costs more.</h2>
-        <p>
-          On most projects, the schedule, the budget, and the information all sit
-          with the contractor. That is not a criticism of contractors — it is
-          simply the wrong arrangement for the person paying the bills.
-        </p>
-        <p>
-          We restore the balance. One professional, on your side, watching the
-          numbers and the work so the project serves your goals instead of
-          drifting away from them.
-        </p>
-      </div>
-      <div class="value__quote">
-        <Quote cite="The promise" role="What representation should feel like">
-          You hired professionals to build something. You should get to think
-          about the result — not referee the process.
-        </Quote>
-      </div>
-    </div>
-  </Section>
-
-  <!-- Process preview -->
-  <Section tone="cream" reveal={true}>
-    <div class="section-head">
-      <p class="eyebrow">How it works</p>
-      <h2>A defined path, calmly run.</h2>
-      <p class="lede text-muted">
-        The method is as ordered as the service it delivers. A preview of the
-        full process.
-      </p>
-    </div>
-    <ol class="steps">
-      <ProcessStep number="01" title="Listen &amp; assess">
-        We start with your goals, your property, and your constraints — then
-        tell you, honestly, what the project really involves.
-      </ProcessStep>
-      <ProcessStep number="02" title="Plan &amp; budget">
-        Scope and a realistic budget on paper, with the early decisions made
-        before they become expensive ones.
-      </ProcessStep>
-      <ProcessStep number="03" title="Bid &amp; build">
-        We level bids, vet contracts, and manage the work day to day so the
-        build matches the plan.
-      </ProcessStep>
-    </ol>
-    <div class="section-cta">
-      <Button href="/process" variant="outline">See the full process</Button>
-    </div>
-  </Section>
-
-  <!-- About preview -->
-  <Section tone="blush" reveal={true}>
-    <div class="about-preview">
-      <div class="about-preview__media">
-        <!-- REAL PHOTO SLOT — replace with Daniel Hekkel's actual portrait. -->
-        <ImageSlot ratio="3 / 4" label="Daniel Hekkel" />
-      </div>
-      <div class="about-preview__text">
-        <p class="eyebrow">Who you work with</p>
-        <h2>Daniel Hekkel</h2>
-        <p class="text-muted measure">
-          Twenty years in construction taught Daniel that most projects don't
-          fail on craft — they fail on coordination, communication, and
-          decisions made too late. Renovation Consulting Co. exists to fix that,
-          one owner at a time.
-        </p>
-        <p class="text-muted measure">
-          He represents clients across Palm Springs and the Coachella Valley,
-          bringing the calm, methodical oversight that a design-forward
-          renovation deserves.
-        </p>
-        <div class="section-cta section-cta--left">
-          <Button href="/about" variant="ghost">More about Daniel</Button>
+        <div class="manifesto__aside">
+          <p class="text-muted">
+            With more than twenty years in construction, Daniel Hekkel acts as
+            your construction manager and owner's representative: one steady
+            point of accountability, from the first drawing to the final
+            walkthrough.
+          </p>
+          <Button href="/about" variant="ghost">Meet Daniel</Button>
         </div>
       </div>
     </div>
   </Section>
 
-  <!-- Journal preview -->
-  <Section tone="cream" reveal={true}>
-    <div class="section-head section-head--row">
+  <Marquee items={capabilities} tone="ink" />
+
+  <!-- Services showcase -->
+  <Section tone="cream">
+    <div class="head" data-reveal>
+      <p class="eyebrow eyebrow--rule">What we manage</p>
+      <h2 class="head__title">Full-scope construction management.</h2>
+      <p class="lede text-muted">
+        Engaged for the entire build, or for the stages where an owner's
+        advocate matters most.
+      </p>
+    </div>
+    <ServiceShowcase services={showcaseServices} />
+    <div class="head__cta" data-reveal>
+      <Button href="/services" variant="outline">Explore all services</Button>
+    </div>
+  </Section>
+
+  <!-- Why representation (dark, image + quote) -->
+  <Section tone="ink">
+    <div class="why">
+      <div class="why__media" data-reveal-clip>
+        <Figure
+          src={images.construction.src}
+          alt={images.construction.alt}
+          fallback="ink"
+          ratio="3 / 4"
+          parallax={true}
+          clip={false}
+          rounded={true}
+        />
+      </div>
+      <div class="why__text" data-reveal-group>
+        <p class="eyebrow eyebrow--rule">Why representation</p>
+        <h2>When no one answers to you, everything costs more.</h2>
+        <p>
+          On most projects the schedule, the budget, and the information all sit
+          with the contractor. That's not a knock on builders — it's simply the
+          wrong arrangement for the person writing the checks.
+        </p>
+        <p>
+          We restore the balance: one professional on your side, watching the
+          numbers and the work, so the project serves your goals instead of
+          drifting from them.
+        </p>
+        <div class="why__quote">
+          <Quote>
+            You hired professionals to build something. You should get to think
+            about the result — not referee the process.
+          </Quote>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Stats -->
+  <Section tone="blush">
+    <div class="stats" data-reveal-group>
+      <Stat figure="20+" label="Years managing construction" />
+      <Stat figure="100%" label="On your side of the table" />
+      <Stat figure="1" label="Point of accountability, start to finish" />
+      <Stat figure="$0" label="Owed to any contractor — we work for you" />
+    </div>
+  </Section>
+
+  <!-- Project types -->
+  <Section tone="cream">
+    <div class="head head--row" data-reveal>
       <div>
-        <p class="eyebrow">Notes &amp; perspective</p>
-        <h2>From the journal.</h2>
+        <p class="eyebrow eyebrow--rule">Where we focus</p>
+        <h2 class="head__title">High-end homes, built for the desert.</h2>
+      </div>
+      <p class="text-muted measure">
+        From ground-up custom homes to careful mid-century restorations across
+        Palm Springs and the Coachella Valley.
+      </p>
+    </div>
+    <ul class="types" data-reveal-group>
+      {
+        projectTypes.map((t) => (
+          <li class="type">
+            <Figure src={t.image.src} alt={t.image.alt} fallback={t.image.fallback} ratio="3 / 4" rounded={true} />
+            <div class="type__meta">
+              <h3 class="type__title">{t.title}</h3>
+              <p class="type__note text-muted">{t.note}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- Process preview -->
+  <Section tone="ink">
+    <div class="head" data-reveal>
+      <p class="eyebrow eyebrow--rule">How it works</p>
+      <h2 class="head__title">A defined path, calmly run.</h2>
+    </div>
+    <ol class="steps" data-reveal-group>
+      <ProcessStep number="01" title="Listen & assess">
+        Your goals, your property, your budget — and an honest read on what the
+        project really involves.
+      </ProcessStep>
+      <ProcessStep number="02" title="Plan & budget">
+        Scope and a realistic budget on paper, with cost-driving decisions made
+        early, while they're cheap to make.
+      </ProcessStep>
+      <ProcessStep number="03" title="Bid & build">
+        We level bids, vet contracts, and manage the work day to day so the
+        build matches the plan.
+      </ProcessStep>
+    </ol>
+    <div class="head__cta" data-reveal>
+      <Button href="/process" variant="light">See the full process</Button>
+    </div>
+  </Section>
+
+  <!-- About preview -->
+  <Section tone="cream">
+    <div class="about">
+      <div class="about__media" data-reveal-clip>
+        <!-- REAL PHOTO SLOT — replace with Daniel Hekkel's actual portrait. -->
+        <ImageSlot ratio="4 / 5" label="Daniel Hekkel" />
+      </div>
+      <div class="about__text" data-reveal-group>
+        <p class="eyebrow eyebrow--rule">Who you work with</p>
+        <h2>Daniel Hekkel</h2>
+        <p class="text-muted measure">
+          Twenty years in construction taught Daniel that projects rarely fail
+          on craft — they fail on coordination, communication, and decisions
+          made too late. Renovation Consulting Co. exists to fix exactly that.
+        </p>
+        <p class="text-muted measure">
+          He represents owners across Palm Springs and the Coachella Valley,
+          bringing the calm, methodical oversight a design-forward home
+          deserves.
+        </p>
+        <Button href="/about" variant="ghost">More about Daniel</Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Journal preview -->
+  <Section tone="blush">
+    <div class="head head--row" data-reveal>
+      <div>
+        <p class="eyebrow eyebrow--rule">Notes & perspective</p>
+        <h2 class="head__title">From the journal.</h2>
       </div>
       <Button href="/journal" variant="ghost">Read the journal</Button>
     </div>
-    <ul class="journal-grid">
+    <ul class="journal" data-reveal-group>
       {
         posts.map((post) => (
           <li>
-            <a class="journal-card" href={`/journal/${post.id}/`}>
-              <span class="journal-card__meta">
-                <span class="journal-card__cat">{post.data.category}</span>
-                <time datetime={post.data.date.toISOString()}>
-                  {dateFmt.format(post.data.date)}
-                </time>
+            <a class="jcard" href={`/journal/${post.id}/`}>
+              <span class="jcard__meta">
+                <span class="jcard__cat">{post.data.category}</span>
+                <time datetime={post.data.date.toISOString()}>{dateFmt.format(post.data.date)}</time>
               </span>
-              <h3 class="journal-card__title">{post.data.title}</h3>
-              <p class="journal-card__desc">{post.data.description}</p>
-              <span class="journal-card__more">Read<span aria-hidden="true"> →</span></span>
+              <h3 class="jcard__title">{post.data.title}</h3>
+              <p class="jcard__desc">{post.data.description}</p>
+              <span class="jcard__more">Read<span aria-hidden="true"> →</span></span>
             </a>
           </li>
         ))
       }
     </ul>
   </Section>
+
+  <CtaBand
+    title="Let's talk about your project."
+    text="A calm, no-obligation conversation about your goals, your budget, and how the work gets managed."
+    image={images.pool.src}
+    imageAlt={images.pool.alt}
+  />
 </BaseLayout>
 
 <style>
-  /* Positioning */
-  .intro {
-    max-width: 60rem;
+  /* Manifesto */
+  .manifesto {
+    max-width: 64rem;
   }
-  .intro__title {
-    margin-block: var(--space-3) var(--space-5);
-    max-width: 20ch;
+  .manifesto__title {
+    margin-block: var(--space-4) var(--space-6);
+    font-size: var(--fs-display);
+    font-weight: 300;
+    max-width: 18ch;
   }
-  .intro__cols {
+  .manifesto__cols {
     display: grid;
+    gap: var(--space-5);
+  }
+  @media (min-width: 820px) {
+    .manifesto__cols {
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--space-7);
+    }
+  }
+  .manifesto__aside :global(.btn) {
+    margin-top: var(--space-4);
+  }
+
+  /* Section heads */
+  .head {
+    max-width: 48rem;
+    margin-bottom: var(--space-6);
+  }
+  .head__title {
+    margin-block: var(--space-3) var(--space-3);
+  }
+  .head--row {
+    max-width: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
     gap: var(--space-4);
   }
-  @media (min-width: 760px) {
-    .intro__cols {
-      grid-template-columns: 1.1fr 1fr;
-      gap: var(--space-6);
+  .head--row .head__title {
+    margin-bottom: 0;
+  }
+  .head__cta {
+    margin-top: var(--space-6);
+  }
+
+  /* Why */
+  .why {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: center;
+  }
+  .why__text h2 {
+    margin-block: var(--space-3) var(--space-4);
+    max-width: 16ch;
+  }
+  .why__text p {
+    color: rgba(251, 247, 242, 0.78);
+    max-width: 50ch;
+  }
+  .why__quote {
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--hairline-light);
+  }
+  @media (min-width: 900px) {
+    .why {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: var(--space-7);
     }
   }
 
@@ -244,76 +389,36 @@ const dateFmt = new Intl.DateTimeFormat("en-US", {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-5) var(--space-4);
   }
-  @media (min-width: 860px) {
+  @media (min-width: 900px) {
     .stats {
       grid-template-columns: repeat(4, 1fr);
     }
   }
 
-  /* Section heads */
-  .section-head {
-    max-width: 46rem;
-    margin-bottom: var(--space-6);
-  }
-  .section-head h2 {
-    margin-block: var(--space-3) var(--space-3);
-  }
-  .section-head--row {
-    max-width: none;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-3);
-  }
-  .section-head--row h2 {
-    margin-block: var(--space-3) 0;
-  }
-
-  .section-cta {
-    margin-top: var(--space-6);
-  }
-  .section-cta--left {
-    margin-top: var(--space-4);
-  }
-
-  /* Card grid */
-  .card-grid {
+  /* Project types */
+  .types {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-3);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
   }
-  @media (min-width: 640px) {
-    .card-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  @media (min-width: 1000px) {
-    .card-grid {
+  @media (min-width: 880px) {
+    .types {
       grid-template-columns: repeat(4, 1fr);
     }
   }
-
-  /* Value */
-  .value {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
+  .type__meta {
+    margin-top: var(--space-3);
   }
-  .value__lead h2 {
-    margin-block: var(--space-3) var(--space-4);
-    max-width: 18ch;
+  .type__title {
+    font-size: var(--fs-h4);
+    font-weight: 500;
   }
-  .value__lead p {
-    color: rgba(251, 247, 242, 0.78);
-    max-width: 52ch;
-  }
-  @media (min-width: 900px) {
-    .value {
-      grid-template-columns: 1.2fr 1fr;
-      gap: var(--space-7);
-      align-items: center;
-    }
+  .type__note {
+    font-size: var(--fs-small);
+    margin-top: 0.25rem;
   }
 
   /* Steps */
@@ -323,25 +428,28 @@ const dateFmt = new Intl.DateTimeFormat("en-US", {
     margin: 0;
   }
 
-  /* About preview */
-  .about-preview {
+  /* About */
+  .about {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-5);
     align-items: center;
   }
-  .about-preview__text h2 {
+  .about__text h2 {
     margin-block: var(--space-3) var(--space-3);
   }
+  .about__text :global(.btn) {
+    margin-top: var(--space-3);
+  }
   @media (min-width: 860px) {
-    .about-preview {
+    .about {
       grid-template-columns: 0.8fr 1.2fr;
       gap: var(--space-7);
     }
   }
 
-  /* Journal grid */
-  .journal-grid {
+  /* Journal */
+  .journal {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -350,28 +458,30 @@ const dateFmt = new Intl.DateTimeFormat("en-US", {
     gap: var(--space-3);
   }
   @media (min-width: 760px) {
-    .journal-grid {
+    .journal {
       grid-template-columns: repeat(3, 1fr);
     }
   }
-  .journal-card {
+  .jcard {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
     height: 100%;
     padding: var(--space-4);
     color: inherit;
-    background-color: var(--cream);
-    border: 1px solid var(--greige);
-    border-radius: var(--radius);
-    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+    background: var(--cream);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
   }
-  .journal-card:hover {
+  .jcard:hover {
     border-color: var(--ink);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
     color: inherit;
   }
-  .journal-card__meta {
+  .jcard__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
@@ -380,29 +490,29 @@ const dateFmt = new Intl.DateTimeFormat("en-US", {
     text-transform: uppercase;
     color: var(--greige-deep);
   }
-  .journal-card__cat {
+  .jcard__cat {
     color: var(--terracotta);
     font-weight: 600;
   }
-  .journal-card__title {
+  .jcard__title {
     font-size: var(--fs-h3);
     font-weight: 400;
   }
-  .journal-card__desc {
+  .jcard__desc {
     flex: 1;
     font-size: var(--fs-small);
     color: var(--greige-deep);
     line-height: 1.6;
   }
-  .journal-card__more {
+  .jcard__more {
     font-size: var(--fs-small);
     font-weight: 600;
     color: var(--terracotta);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .journal-card,
-    .journal-card:hover {
+    .jcard,
+    .jcard:hover {
       transition: none;
       transform: none;
     }

@@ -1,147 +1,245 @@
 ---
 import Container from "./Container.astro";
 import Button from "./Button.astro";
+import { images } from "../data/images";
 
 /**
- * Hero shell — full-bleed, near full-viewport atmosphere with a warm gradient
- * overlay for legibility.
+ * Hero — full-bleed, cinematic. Background image with parallax + warm gradient
+ * + grain, over a desert-dusk gradient fallback so it's striking even if the
+ * photo never loads. Headline reveals line-by-line.
  *
- * SWAP NOTE: the media layer (`.hero__media`) is structured so the <img> can be
- * replaced by a <video> (autoplay muted loop playsinline) with zero layout
- * change. Keep the same wrapper + overlay; only the inner element changes.
- *
- * The background here is an ATMOSPHERE image — never presented as a real
- * Renovation Consulting Co. project.
+ * SWAP NOTE: the <img> in .hero__bg can be replaced by a <video> (muted loop
+ * playsinline) with zero layout change — keep the wrapper + overlays.
+ * Background is ATMOSPHERE, never presented as a real RCC project.
  */
 interface Props {
   eyebrow?: string;
-  title: string;
+  lines: string[];
   subtitle?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
   image?: string;
   imageAlt?: string;
+  meta?: string[];
 }
 
 const {
   eyebrow,
-  title,
+  lines,
   subtitle,
   ctaLabel = "Schedule a Consultation",
   ctaHref = "/contact",
-  image = "/images/atmosphere/hero-atmosphere.svg",
-  imageAlt = "Warm, minimal desert-modern interior — atmosphere",
+  secondaryLabel,
+  secondaryHref,
+  image = images.heroExterior.src,
+  imageAlt = images.heroExterior.alt,
+  meta = [],
 } = Astro.props;
 ---
 
 <section class="hero">
-  <div class="hero__media">
-    <!-- Swap this <img> for a <video> later; wrapper + overlay stay identical. -->
-    <img class="hero__img" src={image} alt={imageAlt} fetchpriority="high" />
+  <div class="hero__bg">
+    <img
+      class="hero__img"
+      data-img
+      data-parallax
+      src={image}
+      alt={imageAlt}
+      fetchpriority="high"
+      decoding="async"
+    />
     <div class="hero__overlay" aria-hidden="true"></div>
   </div>
 
-  <div class="hero__content">
-    <Container>
-      <div class="hero__inner">
-        {eyebrow && <p class="eyebrow hero__eyebrow">{eyebrow}</p>}
-        <h1 class="hero__title">{title}</h1>
-        {subtitle && <p class="hero__subtitle">{subtitle}</p>}
-        <div class="hero__actions">
-          <Button href={ctaHref} variant="primary">{ctaLabel}</Button>
-        </div>
+  <Container>
+    <div class="hero__content">
+      {eyebrow && <p class="eyebrow eyebrow--rule hero__eyebrow">{eyebrow}</p>}
+      <h1 class="hero__title reveal-lines">
+        {lines.map((line) => (
+          <span class="line"><span>{line}</span></span>
+        ))}
+      </h1>
+      {subtitle && <p class="hero__subtitle" data-reveal>{subtitle}</p>}
+      <div class="hero__actions" data-reveal>
+        <Button href={ctaHref} variant="primary">{ctaLabel}</Button>
+        {secondaryLabel && (
+          <Button href={secondaryHref ?? "/services"} variant="hero-ghost">
+            {secondaryLabel}
+          </Button>
+        )}
       </div>
-    </Container>
-  </div>
+      {
+        meta.length > 0 && (
+          <ul class="hero__meta" data-reveal>
+            {meta.map((m) => <li>{m}</li>)}
+          </ul>
+        )
+      }
+    </div>
+  </Container>
+
+  <a class="hero__scroll" href="#start" aria-label="Scroll to content">
+    <span>Scroll</span>
+    <span class="hero__scroll-line" aria-hidden="true"></span>
+  </a>
 </section>
 
 <style>
   .hero {
     position: relative;
-    min-height: 92svh;
+    min-height: 100svh;
     display: flex;
     align-items: flex-end;
     overflow: hidden;
-    background-color: var(--blush);
+    /* desert-dusk fallback beneath the photo */
+    background: linear-gradient(150deg, #3a201a 0%, #6e2f20 50%, #241e1a 100%);
+    padding-bottom: clamp(3.5rem, 9vh, 8rem);
   }
-
-  .hero__media {
+  .hero__bg {
     position: absolute;
     inset: 0;
     z-index: 0;
   }
-
   .hero__img {
+    position: absolute;
+    inset: -9% 0;
     width: 100%;
-    height: 100%;
+    height: 118%;
     object-fit: cover;
     object-position: center;
-    /* very slow ken-burns drift */
-    animation: hero-zoom 26s ease-out forwards;
+    opacity: 0;
+    transition: opacity 1.4s var(--ease-out);
+    will-change: transform;
   }
-
-  /* Warm gradient: ink fading to transparent for text legibility */
+  .hero__img.is-loaded {
+    opacity: 1;
+  }
+  .hero__img.is-failed {
+    display: none;
+  }
   .hero__overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
         to top,
-        rgba(36, 30, 26, 0.72) 0%,
-        rgba(36, 30, 26, 0.34) 38%,
-        rgba(36, 30, 26, 0.06) 70%,
-        rgba(36, 30, 26, 0.18) 100%
-      );
+        rgba(20, 15, 12, 0.86) 0%,
+        rgba(28, 21, 17, 0.5) 34%,
+        rgba(36, 30, 26, 0.12) 64%,
+        rgba(36, 30, 26, 0.34) 100%
+      ),
+      linear-gradient(105deg, rgba(36, 30, 26, 0.45) 0%, rgba(36, 30, 26, 0) 55%);
   }
 
   .hero__content {
     position: relative;
     z-index: 1;
-    width: 100%;
-    padding-bottom: clamp(3rem, 8vh, 7rem);
+    max-width: 60rem;
     padding-top: calc(var(--nav-h) + var(--space-4));
   }
-
-  .hero__inner {
-    max-width: 56rem;
-  }
-
   .hero__eyebrow {
     color: var(--blush);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
   }
-
   .hero__title {
     color: var(--cream);
     font-size: var(--fs-hero);
     font-weight: 300;
-    line-height: 1.02;
-    letter-spacing: -0.025em;
+    line-height: 0.98;
+    letter-spacing: var(--ls-mega);
   }
-
   .hero__subtitle {
-    color: rgba(251, 247, 242, 0.86);
-    font-size: clamp(1.125rem, 1.8vw, 1.4rem);
+    color: rgba(251, 247, 242, 0.9);
+    font-size: clamp(1.15rem, 1.7vw, 1.45rem);
     line-height: 1.5;
-    max-width: 44rem;
+    max-width: 46rem;
     margin-top: var(--space-4);
   }
-
   .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
     margin-top: var(--space-5);
   }
+  .hero__meta {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-6) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    color: rgba(251, 247, 242, 0.72);
+    font-size: var(--fs-small);
+  }
+  .hero__meta li {
+    position: relative;
+    padding-left: 1.1rem;
+  }
+  .hero__meta li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: var(--terracotta);
+    transform: rotate(45deg);
+  }
 
-  @keyframes hero-zoom {
-    from {
-      transform: scale(1.06);
+  .hero__scroll {
+    position: absolute;
+    right: var(--gutter);
+    bottom: clamp(2rem, 6vh, 4rem);
+    z-index: 1;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(251, 247, 242, 0.75);
+    font-size: var(--fs-eyebrow);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+  .hero__scroll-line {
+    width: 1px;
+    height: 4rem;
+    background: linear-gradient(
+      to bottom,
+      rgba(251, 247, 242, 0.7),
+      rgba(251, 247, 242, 0)
+    );
+    animation: scrollPulse 2.4s var(--ease) infinite;
+    transform-origin: top;
+  }
+  @keyframes scrollPulse {
+    0%,
+    100% {
+      transform: scaleY(0.4);
+      opacity: 0.4;
     }
-    to {
-      transform: scale(1);
+    50% {
+      transform: scaleY(1);
+      opacity: 1;
     }
   }
 
+  @media (min-width: 920px) {
+    .hero__scroll {
+      display: flex;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .hero__img {
+      transition: opacity 0.4s ease;
+    }
+    .hero__scroll-line {
       animation: none;
     }
+  }
+
+  :global(html:not(.js)) .hero__img {
+    opacity: 1;
   }
 </style>

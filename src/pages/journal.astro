@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Section from "../components/Section.astro";
+import { images } from "../data/images";
 
 const posts = (await getCollection("journal")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -24,7 +25,10 @@ const [featured, ...rest] = posts;
   <PageHeader
     eyebrow="Notes & perspective"
     title="The Journal."
-    lede="Short, useful pieces for owners considering a renovation or custom build — on representation, budgets, hiring, and building well in the desert."
+    lede="Short, useful pieces for owners considering a build or renovation — on construction management, budgets, hiring, and building well in the desert."
+    image={images.texture.src}
+    imageAlt={images.texture.alt}
+    fallback="clay"
   />
 
   {

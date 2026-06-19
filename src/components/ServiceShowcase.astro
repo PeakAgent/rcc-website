@@ -1,0 +1,173 @@
+---
+import Figure from "./Figure.astro";
+import type { Img } from "../data/images";
+
+/**
+ * ServiceShowcase — editorial numbered list of services. On desktop, hovering a
+ * row cross-fades a large sticky image; on mobile it's a clean stacked list with
+ * a single lead image. All images carry gradient fallbacks via <Figure>.
+ */
+interface Service {
+  num: string;
+  title: string;
+  body: string;
+  image: Img;
+}
+interface Props {
+  services: Service[];
+}
+const { services } = Astro.props;
+---
+
+<div class="showcase" data-showcase>
+  <div class="showcase__media" aria-hidden="true">
+    {
+      services.map((s, i) => (
+        <div
+          class:list={["showcase__fig", { "is-active": i === 0 }]}
+          data-fig={i}
+        >
+          <Figure
+            src={s.image.src}
+            alt={s.image.alt}
+            fallback={s.image.fallback}
+            ratio="4 / 5"
+            clip={false}
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  <ol class="showcase__list" data-reveal-group>
+    {
+      services.map((s, i) => (
+        <li class="showcase__row" data-row={i}>
+          <div class="showcase__row-head">
+            <span class="showcase__num">{s.num}</span>
+            <h3 class="showcase__title">{s.title}</h3>
+          </div>
+          <p class="showcase__body">{s.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .showcase {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  /* Media: hidden on mobile except first (lead image) */
+  .showcase__media {
+    position: relative;
+    display: none;
+  }
+  .showcase__fig {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.02);
+    transition: opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out);
+  }
+  .showcase__fig.is-active {
+    opacity: 1;
+    transform: none;
+  }
+
+  .showcase__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .showcase__row {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--hairline);
+    transition: padding-left 0.4s var(--ease), opacity 0.4s var(--ease);
+  }
+  .showcase__row:last-child {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .showcase__row-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+  .showcase__num {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--terracotta);
+    letter-spacing: 0.1em;
+    min-width: 2.5rem;
+  }
+  .showcase__title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 300;
+    transition: color 0.3s var(--ease);
+  }
+  .showcase__body {
+    color: var(--greige-deep);
+    max-width: 54ch;
+    margin-top: var(--space-2);
+    padding-left: calc(2.5rem + var(--space-3));
+  }
+
+  @media (min-width: 900px) {
+    .showcase {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: var(--space-7);
+      align-items: start;
+    }
+    .showcase__media {
+      display: block;
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    /* dim non-active rows for focus */
+    [data-showcase].is-hovering .showcase__row {
+      opacity: 0.45;
+    }
+    [data-showcase].is-hovering .showcase__row.is-active {
+      opacity: 1;
+      padding-left: var(--space-3);
+    }
+    .showcase__row.is-active .showcase__title {
+      color: var(--terracotta);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase__fig {
+      transition: opacity 0.2s linear;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const sc = document.querySelector<HTMLElement>("[data-showcase]");
+  if (sc && window.matchMedia("(min-width: 900px)").matches) {
+    const figs = sc.querySelectorAll<HTMLElement>("[data-fig]");
+    const rows = sc.querySelectorAll<HTMLElement>("[data-row]");
+    const activate = (i: number) => {
+      figs.forEach((f, fi) => f.classList.toggle("is-active", fi === i));
+      rows.forEach((r, ri) => r.classList.toggle("is-active", ri === i));
+    };
+    rows.forEach((row, i) => {
+      row.addEventListener("mouseenter", () => {
+        sc.classList.add("is-hovering");
+        activate(i);
+      });
+    });
+    sc.addEventListener("mouseleave", () => {
+      sc.classList.remove("is-hovering");
+      activate(0);
+    });
+  }
+</script>

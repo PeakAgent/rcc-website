@@ -1,0 +1,63 @@
+---
+/**
+ * Marquee — a slow, continuous credibility strip. Items are duplicated so the
+ * loop is seamless. Pauses on hover; static under reduced-motion.
+ */
+interface Props {
+  items: string[];
+  tone?: "ink" | "cream" | "blush";
+}
+const { items, tone = "ink" } = Astro.props;
+const loop = [...items, ...items];
+---
+
+<div class:list={["mq", `mq--${tone}`]} aria-hidden="true">
+  <div class="marquee">
+    <div class="marquee__track">
+      {
+        loop.map((item) => (
+          <span class="mq__item">
+            {item}
+            <span class="mq__dot">✦</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .mq {
+    padding-block: var(--space-3);
+    border-block: 1px solid var(--hairline);
+  }
+  .mq--ink {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--hairline-light);
+  }
+  .mq--cream {
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .mq--blush {
+    background: var(--blush);
+    color: var(--ink);
+  }
+  .mq__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 3rem;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.1rem, 2.4vw, 1.75rem);
+    letter-spacing: 0.01em;
+  }
+  .mq__dot {
+    color: var(--terracotta);
+    font-size: 0.7em;
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+</style>
