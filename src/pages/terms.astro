@@ -2,17 +2,78 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Section from "../components/Section.astro";
+
+const updated = "June 2026";
 ---
 
 <BaseLayout
   title="Terms"
-  description="Terms of use for Renovation Consulting Co."
+  description="The terms governing your use of the Renovation Consulting Co. website."
   noindex={true}
 >
-  <PageHeader eyebrow="Information" title="Terms" />
+  <PageHeader eyebrow="Information" title="Terms of Use" />
   <Section tone="cream" width="narrow">
-    <p class="text-muted measure">
-      This is a placeholder. The full terms of use will be published here.
-    </p>
+    <div class="legal">
+      <p class="legal__updated text-muted">Last updated: {updated}</p>
+
+      <p>
+        These terms govern your use of the Renovation Consulting Co. website. By
+        using the site, you agree to them.
+      </p>
+
+      <h2>Informational purpose</h2>
+      <p>
+        The content on this site is provided for general information about our
+        services. It does not constitute professional, construction, or legal
+        advice, and it does not create a client relationship. Any engagement is
+        governed by a separate written agreement.
+      </p>
+
+      <h2>Intellectual property</h2>
+      <p>
+        The content, design, and branding on this site are the property of
+        Renovation Consulting Co. and may not be reproduced without permission.
+      </p>
+
+      <h2>No warranties</h2>
+      <p>
+        The site is provided "as is." While we work to keep information accurate
+        and current, we make no warranties regarding its completeness or
+        availability.
+      </p>
+
+      <h2>Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by law, Renovation Consulting Co. is not
+        liable for any damages arising from your use of this website.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms? Reach us at
+        <a href="mailto:info@rcc-cv.com">info@rcc-cv.com</a> or 415-323-9320.
+      </p>
+    </div>
   </Section>
 </BaseLayout>
+
+<style>
+  .legal :global(h2) {
+    font-size: var(--fs-h3);
+    font-weight: 400;
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+  .legal :global(p) {
+    margin-bottom: var(--space-3);
+    line-height: 1.7;
+  }
+  .legal :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .legal__updated {
+    font-size: var(--fs-small);
+    margin-bottom: var(--space-5);
+  }
+</style>

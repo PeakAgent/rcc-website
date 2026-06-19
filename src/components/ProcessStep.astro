@@ -1,0 +1,55 @@
+---
+/**
+ * ProcessStep — a numbered step in an ordered, editorial process list.
+ */
+interface Props {
+  number: string;
+  title: string;
+}
+const { number, title } = Astro.props;
+---
+
+<li class="step">
+  <div class="step__num" aria-hidden="true">{number}</div>
+  <div class="step__body">
+    <h3 class="step__title">{title}</h3>
+    <p class="step__text"><slot /></p>
+  </div>
+</li>
+
+<style>
+  .step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--greige);
+  }
+  .step:last-child {
+    border-bottom: 1px solid var(--greige);
+  }
+  .step__num {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--terracotta);
+    min-width: 2.5rem;
+  }
+  .step__title {
+    font-size: var(--fs-h3);
+    font-weight: 400;
+    margin-bottom: var(--space-2);
+  }
+  .step__text {
+    color: var(--greige-deep);
+    max-width: 60ch;
+  }
+  @media (min-width: 720px) {
+    .step {
+      grid-template-columns: 6rem 1fr;
+      gap: var(--space-5);
+      padding-block: var(--space-5);
+    }
+  }
+</style>

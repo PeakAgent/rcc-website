@@ -1,0 +1,170 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/Container.astro";
+import Section from "../../components/Section.astro";
+import Button from "../../components/Button.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("journal");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const dateFmt = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article>
+    <!-- Article header -->
+    <header class="article-head">
+      <Container width="narrow">
+        <a class="article-head__back" href="/journal">
+          <span aria-hidden="true">←</span> The Journal
+        </a>
+        <p class="article-head__meta">
+          <span class="article-head__cat">{post.data.category}</span>
+          <time datetime={post.data.date.toISOString()}>
+            {dateFmt.format(post.data.date)}
+          </time>
+          {post.data.readingTime && <span>{post.data.readingTime}</span>}
+        </p>
+        <h1 class="article-head__title">{post.data.title}</h1>
+        <p class="article-head__desc">{post.data.description}</p>
+      </Container>
+    </header>
+
+    <!-- Article body -->
+    <div class="article-body">
+      <Container width="narrow">
+        <div class="prose">
+          <Content />
+        </div>
+      </Container>
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <Section tone="blush">
+    <div class="article-cta">
+      <p class="eyebrow">Considering a project?</p>
+      <h2>Let's talk it through.</h2>
+      <p class="text-muted">
+        If you're weighing a renovation or build in the Coachella Valley, the
+        first conversation is always free.
+      </p>
+      <Button href="/contact" variant="primary">Schedule a Consultation</Button>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .article-head {
+    background-color: var(--cream);
+    padding-top: calc(var(--nav-h) + clamp(2.5rem, 7vw, 5rem));
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+    border-bottom: 1px solid var(--greige);
+  }
+  .article-head__back {
+    display: inline-block;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--greige-deep);
+    margin-bottom: var(--space-5);
+  }
+  .article-head__back:hover {
+    color: var(--terracotta);
+  }
+  .article-head__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--greige-deep);
+    margin-bottom: var(--space-3);
+  }
+  .article-head__cat {
+    color: var(--terracotta);
+    font-weight: 600;
+  }
+  .article-head__title {
+    font-size: var(--fs-display);
+    font-weight: 300;
+  }
+  .article-head__desc {
+    margin-top: var(--space-4);
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--greige-deep);
+  }
+
+  .article-body {
+    background-color: var(--cream);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  /* Prose */
+  .prose :global(h2) {
+    font-size: var(--fs-h2);
+    font-weight: 300;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-3);
+  }
+  .prose :global(h3) {
+    font-size: var(--fs-h3);
+    font-weight: 400;
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+  .prose :global(p) {
+    font-size: 1.1875rem;
+    line-height: 1.75;
+    margin-bottom: var(--space-3);
+  }
+  .prose :global(ul) {
+    margin-block: var(--space-3);
+    padding-left: 1.25rem;
+  }
+  .prose :global(li) {
+    font-size: 1.1875rem;
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+  }
+  .prose :global(li::marker) {
+    color: var(--terracotta);
+  }
+  .prose :global(strong) {
+    font-weight: 600;
+  }
+  .prose :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--greige);
+    margin-block: var(--space-5);
+  }
+  .prose :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .article-cta {
+    max-width: 40rem;
+  }
+  .article-cta h2 {
+    margin-block: var(--space-3) var(--space-3);
+  }
+  .article-cta p {
+    margin-bottom: var(--space-5);
+    max-width: 48ch;
+  }
+</style>

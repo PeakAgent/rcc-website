@@ -1,38 +1,196 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Section from "../components/Section.astro";
-import Button from "../components/Button.astro";
+
+const posts = (await getCollection("journal")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const dateFmt = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const [featured, ...rest] = posts;
 ---
 
 <BaseLayout
   title="Journal"
-  description="Notes on construction project management, renovation, and design-forward building in Palm Springs and the Coachella Valley."
+  description="Notes and perspective on construction project management, renovation, budgeting, and design-forward building in Palm Springs and the Coachella Valley."
 >
   <PageHeader
     eyebrow="Notes & perspective"
-    title="Journal"
-    lede="Thoughts on managing renovations well in a design-forward desert. Articles arrive in a later phase."
+    title="The Journal."
+    lede="Short, useful pieces for owners considering a renovation or custom build — on representation, budgets, hiring, and building well in the desert."
   />
 
-  <Section tone="cream" reveal={true} width="narrow">
-    <p class="eyebrow">Coming soon</p>
-    <h2>The journal is being written.</h2>
-    <p class="text-muted measure">
-      This space will hold short, useful pieces for owners considering a
-      renovation or build. The index and article layout will be added later.
-    </p>
-    <div class="stub-cta">
-      <Button href="/contact" variant="primary">Schedule a Consultation</Button>
-    </div>
-  </Section>
+  {
+    featured && (
+      <Section tone="cream">
+        <a class="featured" href={`/journal/${featured.id}/`} data-reveal>
+          <div class="featured__text">
+            <span class="featured__meta">
+              <span class="featured__cat">{featured.data.category}</span>
+              <time datetime={featured.data.date.toISOString()}>
+                {dateFmt.format(featured.data.date)}
+              </time>
+              {featured.data.readingTime && <span>{featured.data.readingTime}</span>}
+            </span>
+            <h2 class="featured__title">{featured.data.title}</h2>
+            <p class="featured__desc">{featured.data.description}</p>
+            <span class="featured__more">Read the piece<span aria-hidden="true"> →</span></span>
+          </div>
+        </a>
+      </Section>
+    )
+  }
+
+  {
+    rest.length > 0 && (
+      <Section tone="blush" reveal={true}>
+        <ul class="grid">
+          {rest.map((post) => (
+            <li>
+              <a class="card" href={`/journal/${post.id}/`}>
+                <span class="card__meta">
+                  <span class="card__cat">{post.data.category}</span>
+                  <time datetime={post.data.date.toISOString()}>
+                    {dateFmt.format(post.data.date)}
+                  </time>
+                </span>
+                <h3 class="card__title">{post.data.title}</h3>
+                <p class="card__desc">{post.data.description}</p>
+                <span class="card__more">Read<span aria-hidden="true"> →</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
 </BaseLayout>
 
 <style>
-  h2 {
-    margin-block: var(--space-3) var(--space-3);
+  /* Featured */
+  .featured {
+    display: block;
+    color: inherit;
+    padding: var(--space-6);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius);
+    background-color: var(--blush);
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
   }
-  .stub-cta {
-    margin-top: var(--space-5);
+  .featured:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    color: inherit;
+  }
+  .featured__text {
+    max-width: 52rem;
+  }
+  .featured__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--greige-deep);
+    margin-bottom: var(--space-3);
+  }
+  .featured__cat {
+    color: var(--terracotta);
+    font-weight: 600;
+  }
+  .featured__title {
+    font-size: var(--fs-display);
+    font-weight: 300;
+  }
+  .featured__desc {
+    margin-top: var(--space-4);
+    color: var(--greige-deep);
+    font-size: 1.125rem;
+    max-width: 56ch;
+  }
+  .featured__more {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--terracotta);
+  }
+
+  /* Grid */
+  .grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  @media (min-width: 760px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    height: 100%;
+    padding: var(--space-4);
+    color: inherit;
+    background-color: var(--cream);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius);
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .card:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    color: inherit;
+  }
+  .card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--greige-deep);
+  }
+  .card__cat {
+    color: var(--terracotta);
+    font-weight: 600;
+  }
+  .card__title {
+    font-size: var(--fs-h3);
+    font-weight: 400;
+  }
+  .card__desc {
+    flex: 1;
+    font-size: var(--fs-small);
+    color: var(--greige-deep);
+    line-height: 1.6;
+  }
+  .card__more {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--terracotta);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .featured,
+    .featured:hover,
+    .card,
+    .card:hover {
+      transition: none;
+      transform: none;
+    }
   }
 </style>

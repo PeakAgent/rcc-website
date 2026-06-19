@@ -1,0 +1,37 @@
+---
+/**
+ * Stat — a single large figure with a quiet label. Used in trust strips.
+ */
+interface Props {
+  figure: string;
+  label: string;
+}
+const { figure, label } = Astro.props;
+---
+
+<div class="stat">
+  <span class="stat__figure">{figure}</span>
+  <span class="stat__label">{label}</span>
+</div>
+
+<style>
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .stat__figure {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.5rem, 5vw, 3.75rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .stat__label {
+    font-size: var(--fs-small);
+    line-height: 1.4;
+    color: var(--greige-deep);
+    max-width: 22ch;
+  }
+</style>

@@ -2,37 +2,143 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Section from "../components/Section.astro";
+import ProcessStep from "../components/ProcessStep.astro";
 import Button from "../components/Button.astro";
 ---
 
 <BaseLayout
   title="Process"
-  description="A clear, orderly approach to managing construction projects — from planning and budgeting through contractor oversight to a clean close-out."
+  description="A clear, orderly approach to managing construction — from listening and planning through bidding, building, and a clean close-out. How Renovation Consulting Co. keeps projects calm and on course."
 >
   <PageHeader
     eyebrow="How it works"
-    title="Process"
-    lede="A calm, ordered method — as controlled as the service itself. The step-by-step breakdown arrives in Phase 1."
+    title="A calm, ordered method — start to finish."
+    lede="Good management is a sequence, not a scramble. This is how we take a project from first conversation to final walkthrough, keeping you informed at every step."
   />
 
-  <Section tone="blush" reveal={true} width="narrow">
-    <p class="eyebrow">Coming soon</p>
-    <h2>A defined path, start to finish.</h2>
-    <p class="text-muted measure">
-      Planning, budgeting and bids, contractor management, and project
-      close-out will be detailed here next.
-    </p>
-    <div class="stub-cta">
-      <Button href="/contact" variant="primary">Schedule a Consultation</Button>
+  <!-- Steps -->
+  <Section tone="cream">
+    <ol class="steps" data-reveal>
+      <ProcessStep number="01" title="Listen & assess">
+        Every project begins with understanding yours — your goals, your
+        property, your budget, and your timeline. We assess what's realistic and
+        tell you plainly what the project actually involves before any
+        commitments are made.
+      </ProcessStep>
+      <ProcessStep number="02" title="Plan & budget">
+        We translate intentions into a clear scope and a realistic budget on
+        paper. The decisions that drive cost — selections, allowances, and
+        sequencing — get made early, while they're still inexpensive to make.
+      </ProcessStep>
+      <ProcessStep number="03" title="Bid & select">
+        We invite the right contractors, level their bids so you're comparing
+        like for like, and review every contract carefully. You choose your
+        team with full information, not a sales pitch.
+      </ProcessStep>
+      <ProcessStep number="04" title="Build & oversee">
+        Once work begins, we're your presence on site — coordinating trades,
+        verifying quality, tracking the schedule, and resolving issues early.
+        You get steady, honest reporting instead of silence.
+      </ProcessStep>
+      <ProcessStep number="05" title="Control cost & change">
+        Change orders and pay applications are reviewed, priced, and approved
+        deliberately. The budget always reflects decisions you actually made —
+        no quiet drift, no end-of-project surprises.
+      </ProcessStep>
+      <ProcessStep number="06" title="Close out & hand over">
+        We manage the punch list, final inspections, warranties, and
+        documentation, so the project ends as cleanly as it began — complete,
+        documented, and fully yours.
+      </ProcessStep>
+    </ol>
+  </Section>
+
+  <!-- What you can expect -->
+  <Section tone="blush" reveal={true}>
+    <div class="expect">
+      <div class="expect__head">
+        <p class="eyebrow">What to expect</p>
+        <h2>The same things, every time.</h2>
+      </div>
+      <div class="expect__cols">
+        <div>
+          <h3>Steady communication</h3>
+          <p class="text-muted">
+            Regular, plain-language updates so you always know where things
+            stand and what's next.
+          </p>
+        </div>
+        <div>
+          <h3>Transparent numbers</h3>
+          <p class="text-muted">
+            Budgets and change orders you can actually read, tracked and
+            forecast as the project moves.
+          </p>
+        </div>
+        <div>
+          <h3>Fewer surprises</h3>
+          <p class="text-muted">
+            Problems caught early, while they're small — not discovered at the
+            end, when they're not.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- CTA -->
+  <Section tone="ink" reveal={true}>
+    <div class="proc-cta">
+      <p class="eyebrow">Begin</p>
+      <h2>Every project starts with a conversation.</h2>
+      <p>
+        Tell us what you're planning. We'll walk you through how the process
+        would work for your project, specifically.
+      </p>
+      <Button href="/contact" variant="light">Schedule a Consultation</Button>
     </div>
   </Section>
 </BaseLayout>
 
 <style>
-  h2 {
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .expect__head {
+    max-width: 40rem;
+    margin-bottom: var(--space-6);
+  }
+  .expect__head h2 {
+    margin-top: var(--space-3);
+  }
+  .expect__cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  .expect__cols h3 {
+    font-size: var(--fs-h4);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+  @media (min-width: 800px) {
+    .expect__cols {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .proc-cta {
+    max-width: 44rem;
+  }
+  .proc-cta h2 {
     margin-block: var(--space-3) var(--space-3);
   }
-  .stub-cta {
-    margin-top: var(--space-5);
+  .proc-cta p {
+    color: rgba(251, 247, 242, 0.78);
+    margin-bottom: var(--space-5);
+    max-width: 48ch;
   }
 </style>

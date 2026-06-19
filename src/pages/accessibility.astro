@@ -6,15 +6,56 @@ import Section from "../components/Section.astro";
 
 <BaseLayout
   title="Accessibility"
-  description="Accessibility statement for Renovation Consulting Co."
+  description="Renovation Consulting Co. is committed to an accessible, inclusive web experience for all visitors."
   noindex={true}
 >
-  <PageHeader eyebrow="Information" title="Accessibility" />
+  <PageHeader eyebrow="Information" title="Accessibility Statement" />
   <Section tone="cream" width="narrow">
-    <p class="text-muted measure">
-      This is a placeholder. Renovation Consulting Co. is committed to an
-      accessible, inclusive experience. The full accessibility statement will be
-      published here.
-    </p>
+    <div class="legal">
+      <p>
+        Renovation Consulting Co. is committed to providing a website that is
+        accessible to the widest possible audience, regardless of ability or
+        technology.
+      </p>
+
+      <h2>Our approach</h2>
+      <p>
+        We strive to follow the Web Content Accessibility Guidelines (WCAG) 2.1
+        at Level AA. This includes semantic HTML, clear heading structure,
+        sufficient color contrast, descriptive alternative text, keyboard
+        navigability, and respect for reduced-motion preferences.
+      </p>
+
+      <h2>Ongoing effort</h2>
+      <p>
+        Accessibility is an ongoing commitment, not a one-time task. We
+        periodically review the site and address issues as they are identified.
+      </p>
+
+      <h2>Feedback</h2>
+      <p>
+        If you encounter any barrier on this site, or need information in a
+        different format, please let us know at
+        <a href="mailto:info@rcc-cv.com">info@rcc-cv.com</a> or 415-323-9320.
+        We welcome your feedback and will do our best to help.
+      </p>
+    </div>
   </Section>
 </BaseLayout>
+
+<style>
+  .legal :global(h2) {
+    font-size: var(--fs-h3);
+    font-weight: 400;
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+  .legal :global(p) {
+    margin-bottom: var(--space-3);
+    line-height: 1.7;
+  }
+  .legal :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

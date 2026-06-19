@@ -1,13 +1,27 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import ImageSlot from "../components/ImageSlot.astro";
 import Button from "../components/Button.astro";
+import Stat from "../components/Stat.astro";
+import FeatureCard from "../components/FeatureCard.astro";
+import ProcessStep from "../components/ProcessStep.astro";
+import Quote from "../components/Quote.astro";
 
-// NOTE: Phase 0 placeholder copy. Real home content arrives in Phase 1.
 const description =
   "Renovation Consulting Co. — construction project management and owner's representation in Palm Springs and the Coachella Valley. We manage your budget, contractors, and timeline so you don't have to.";
+
+const posts = (await getCollection("journal"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const dateFmt = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 ---
 
 <BaseLayout
@@ -18,12 +32,12 @@ const description =
   <Hero
     eyebrow="Owner's Representation · Palm Springs"
     title="Your project, managed with intention."
-    subtitle="Placeholder headline for Phase 0. Daniel Hekkel represents you — not the contractor — managing budget, trades, and timeline so the work stays calm, clear, and on course."
+    subtitle="Daniel Hekkel represents you — not the contractor — managing budget, trades, and timeline so your renovation or custom build stays calm, clear, and on course."
     ctaLabel="Schedule a Consultation"
     ctaHref="/contact"
   />
 
-  <!-- Intro — proves Section (cream), Container narrow, reveal, type scale -->
+  <!-- Positioning -->
   <Section tone="cream" reveal={true}>
     <div class="intro">
       <p class="eyebrow">The role</p>
@@ -31,87 +45,366 @@ const description =
         One steady point of accountability, from first drawing to final
         walkthrough.
       </h2>
-      <p class="lede text-muted">
-        This is a foundation page. It demonstrates the design system — type,
-        spacing, color, components — without the full Phase 1 content.
-      </p>
-      <div class="intro__cta">
-        <Button href="/services" variant="outline">Explore Services</Button>
-        <Button href="/process" variant="ghost">See the Process</Button>
-      </div>
-    </div>
-  </Section>
-
-  <!-- Atmosphere / photo-slot section — proves Section (blush) + ImageSlot -->
-  <Section tone="blush" reveal={true}>
-    <div class="feature">
-      <div class="feature__text">
-        <p class="eyebrow">The work</p>
-        <h2>Built to hold real project photography.</h2>
-        <p class="text-muted measure">
-          Every place a finished project will eventually appear uses a clean,
-          styled slot — never stock imagery dressed up as completed work.
+      <div class="intro__cols">
+        <p class="lede">
+          A renovation should not require you to learn a new profession. Our work
+          is to carry the budget, the contractors, and the schedule on your
+          behalf — and to make sure the people doing the building answer to your
+          interests.
         </p>
-        <Button href="/contact" variant="ghost">Schedule a Consultation</Button>
-      </div>
-      <div class="feature__media">
-        <!-- REAL PHOTO SLOT — replace with Daniel's actual project photography. -->
-        <ImageSlot ratio="4 / 3" label="Featured project" />
+        <p class="text-muted">
+          With more than twenty years managing construction across the Coachella
+          Valley, Daniel brings order to a process that is usually anything but.
+          You stay informed and in control; you simply don't have to chase it.
+        </p>
       </div>
     </div>
   </Section>
 
-  <!-- Quiet closing band before the footer CTA -->
-  <Section tone="ink" reveal={true}>
-    <div class="closing">
-      <p class="eyebrow">Palm Springs &amp; the Coachella Valley</p>
-      <h2 class="closing__title">
-        Calm, composed, and entirely accountable to you.
-      </h2>
-      <Button href="/contact" variant="light">Schedule a Consultation</Button>
+  <!-- Trust strip -->
+  <Section tone="blush" reveal={true}>
+    <div class="stats">
+      <Stat figure="20+" label="Years managing construction projects" />
+      <Stat figure="100%" label="On your side of the table — never the contractor's" />
+      <Stat figure="1" label="Point of accountability, start to finish" />
+      <Stat figure="Palm Springs" label="& the wider Coachella Valley" />
     </div>
+  </Section>
+
+  <!-- Services overview -->
+  <Section tone="cream" reveal={true}>
+    <div class="section-head">
+      <p class="eyebrow">What we do</p>
+      <h2>Full-service project management.</h2>
+      <p class="lede text-muted">
+        Engaged for the whole arc of a project, or for the parts where an
+        owner's advocate matters most.
+      </p>
+    </div>
+    <div class="card-grid">
+      <FeatureCard number="01" title="Pre-Construction &amp; Planning" href="/services" icon={true}>
+        Scope, feasibility, budgeting, and the early decisions that determine
+        whether everything downstream goes well.
+      </FeatureCard>
+      <FeatureCard number="02" title="Budget &amp; Bid Management" href="/services" icon={true}>
+        Apples-to-apples bid leveling, line-item review, and contracts read
+        carefully before you ever sign them.
+      </FeatureCard>
+      <FeatureCard number="03" title="Contractor Oversight" href="/services" icon={true}>
+        Day-to-day coordination of trades, site visits, and the quality control
+        that keeps standards where you expect them.
+      </FeatureCard>
+      <FeatureCard number="04" title="Schedule &amp; Close-Out" href="/services" icon={true}>
+        Holding the timeline, managing change, and seeing the project through a
+        clean, complete finish.
+      </FeatureCard>
+    </div>
+    <div class="section-cta">
+      <Button href="/services" variant="outline">Explore all services</Button>
+    </div>
+  </Section>
+
+  <!-- Value / why an owner's rep (dark moment) -->
+  <Section tone="ink" reveal={true}>
+    <div class="value">
+      <div class="value__lead">
+        <p class="eyebrow">Why representation</p>
+        <h2>When no one is accountable to you, everything costs more.</h2>
+        <p>
+          On most projects, the schedule, the budget, and the information all sit
+          with the contractor. That is not a criticism of contractors — it is
+          simply the wrong arrangement for the person paying the bills.
+        </p>
+        <p>
+          We restore the balance. One professional, on your side, watching the
+          numbers and the work so the project serves your goals instead of
+          drifting away from them.
+        </p>
+      </div>
+      <div class="value__quote">
+        <Quote cite="The promise" role="What representation should feel like">
+          You hired professionals to build something. You should get to think
+          about the result — not referee the process.
+        </Quote>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Process preview -->
+  <Section tone="cream" reveal={true}>
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>A defined path, calmly run.</h2>
+      <p class="lede text-muted">
+        The method is as ordered as the service it delivers. A preview of the
+        full process.
+      </p>
+    </div>
+    <ol class="steps">
+      <ProcessStep number="01" title="Listen &amp; assess">
+        We start with your goals, your property, and your constraints — then
+        tell you, honestly, what the project really involves.
+      </ProcessStep>
+      <ProcessStep number="02" title="Plan &amp; budget">
+        Scope and a realistic budget on paper, with the early decisions made
+        before they become expensive ones.
+      </ProcessStep>
+      <ProcessStep number="03" title="Bid &amp; build">
+        We level bids, vet contracts, and manage the work day to day so the
+        build matches the plan.
+      </ProcessStep>
+    </ol>
+    <div class="section-cta">
+      <Button href="/process" variant="outline">See the full process</Button>
+    </div>
+  </Section>
+
+  <!-- About preview -->
+  <Section tone="blush" reveal={true}>
+    <div class="about-preview">
+      <div class="about-preview__media">
+        <!-- REAL PHOTO SLOT — replace with Daniel Hekkel's actual portrait. -->
+        <ImageSlot ratio="3 / 4" label="Daniel Hekkel" />
+      </div>
+      <div class="about-preview__text">
+        <p class="eyebrow">Who you work with</p>
+        <h2>Daniel Hekkel</h2>
+        <p class="text-muted measure">
+          Twenty years in construction taught Daniel that most projects don't
+          fail on craft — they fail on coordination, communication, and
+          decisions made too late. Renovation Consulting Co. exists to fix that,
+          one owner at a time.
+        </p>
+        <p class="text-muted measure">
+          He represents clients across Palm Springs and the Coachella Valley,
+          bringing the calm, methodical oversight that a design-forward
+          renovation deserves.
+        </p>
+        <div class="section-cta section-cta--left">
+          <Button href="/about" variant="ghost">More about Daniel</Button>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Journal preview -->
+  <Section tone="cream" reveal={true}>
+    <div class="section-head section-head--row">
+      <div>
+        <p class="eyebrow">Notes &amp; perspective</p>
+        <h2>From the journal.</h2>
+      </div>
+      <Button href="/journal" variant="ghost">Read the journal</Button>
+    </div>
+    <ul class="journal-grid">
+      {
+        posts.map((post) => (
+          <li>
+            <a class="journal-card" href={`/journal/${post.id}/`}>
+              <span class="journal-card__meta">
+                <span class="journal-card__cat">{post.data.category}</span>
+                <time datetime={post.data.date.toISOString()}>
+                  {dateFmt.format(post.data.date)}
+                </time>
+              </span>
+              <h3 class="journal-card__title">{post.data.title}</h3>
+              <p class="journal-card__desc">{post.data.description}</p>
+              <span class="journal-card__more">Read<span aria-hidden="true"> →</span></span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </Section>
 </BaseLayout>
 
 <style>
+  /* Positioning */
   .intro {
-    max-width: 52rem;
+    max-width: 60rem;
   }
   .intro__title {
-    margin-block: var(--space-3) var(--space-4);
+    margin-block: var(--space-3) var(--space-5);
+    max-width: 20ch;
   }
-  .intro__cta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  .intro__cols {
+    display: grid;
     gap: var(--space-4);
-    margin-top: var(--space-5);
+  }
+  @media (min-width: 760px) {
+    .intro__cols {
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--space-6);
+    }
   }
 
-  .feature {
+  /* Stats */
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5) var(--space-4);
+  }
+  @media (min-width: 860px) {
+    .stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Section heads */
+  .section-head {
+    max-width: 46rem;
+    margin-bottom: var(--space-6);
+  }
+  .section-head h2 {
+    margin-block: var(--space-3) var(--space-3);
+  }
+  .section-head--row {
+    max-width: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .section-head--row h2 {
+    margin-block: var(--space-3) 0;
+  }
+
+  .section-cta {
+    margin-top: var(--space-6);
+  }
+  .section-cta--left {
+    margin-top: var(--space-4);
+  }
+
+  /* Card grid */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  @media (min-width: 640px) {
+    .card-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1000px) {
+    .card-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Value */
+  .value {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .value__lead h2 {
+    margin-block: var(--space-3) var(--space-4);
+    max-width: 18ch;
+  }
+  .value__lead p {
+    color: rgba(251, 247, 242, 0.78);
+    max-width: 52ch;
+  }
+  @media (min-width: 900px) {
+    .value {
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-7);
+      align-items: center;
+    }
+  }
+
+  /* Steps */
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* About preview */
+  .about-preview {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-5);
     align-items: center;
   }
-  .feature__text h2 {
+  .about-preview__text h2 {
     margin-block: var(--space-3) var(--space-3);
   }
-  .feature__text :global(.btn--ghost) {
-    margin-top: var(--space-4);
-  }
-
-  .closing {
-    max-width: 46rem;
-  }
-  .closing__title {
-    margin-block: var(--space-3) var(--space-5);
-  }
-
   @media (min-width: 860px) {
-    .feature {
-      grid-template-columns: 1fr 1fr;
+    .about-preview {
+      grid-template-columns: 0.8fr 1.2fr;
       gap: var(--space-7);
+    }
+  }
+
+  /* Journal grid */
+  .journal-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  @media (min-width: 760px) {
+    .journal-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .journal-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    height: 100%;
+    padding: var(--space-4);
+    color: inherit;
+    background-color: var(--cream);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius);
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .journal-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    color: inherit;
+  }
+  .journal-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--greige-deep);
+  }
+  .journal-card__cat {
+    color: var(--terracotta);
+    font-weight: 600;
+  }
+  .journal-card__title {
+    font-size: var(--fs-h3);
+    font-weight: 400;
+  }
+  .journal-card__desc {
+    flex: 1;
+    font-size: var(--fs-small);
+    color: var(--greige-deep);
+    line-height: 1.6;
+  }
+  .journal-card__more {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--terracotta);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .journal-card,
+    .journal-card:hover {
+      transition: none;
+      transform: none;
     }
   }
 </style>

@@ -1,0 +1,84 @@
+---
+import BuildingMark from "./BuildingMark.astro";
+
+/**
+ * FeatureCard — a quiet bordered card for services / value props.
+ * Optional numbered eyebrow and a link that makes the whole card actionable.
+ */
+interface Props {
+  title: string;
+  number?: string;
+  href?: string;
+  linkLabel?: string;
+  icon?: boolean;
+}
+const { title, number, href, linkLabel = "Learn more", icon = false } =
+  Astro.props;
+const Tag = href ? "a" : "div";
+---
+
+<Tag class:list={["feature-card", { "feature-card--link": href }]} href={href}>
+  {number && <span class="feature-card__num">{number}</span>}
+  {icon && <BuildingMark class="feature-card__icon" size={26} />}
+  <h3 class="feature-card__title">{title}</h3>
+  <p class="feature-card__body"><slot /></p>
+  {href && <span class="feature-card__link">{linkLabel}<span aria-hidden="true"> →</span></span>}
+</Tag>
+
+<style>
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background-color: var(--cream);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius);
+    height: 100%;
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .feature-card--link {
+    color: inherit;
+  }
+  .feature-card--link:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    color: inherit;
+  }
+  .feature-card__num {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--terracotta);
+    letter-spacing: 0.08em;
+  }
+  .feature-card__icon {
+    color: var(--terracotta);
+  }
+  .feature-card__title {
+    font-size: var(--fs-h4);
+    font-weight: 500;
+  }
+  .feature-card__body {
+    color: var(--greige-deep);
+    font-size: var(--fs-small);
+    line-height: 1.6;
+    flex: 1;
+  }
+  .feature-card__link {
+    margin-top: var(--space-1);
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--terracotta);
+  }
+  .feature-card--link:hover .feature-card__link {
+    color: var(--terracotta-deep);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feature-card,
+    .feature-card--link:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>
